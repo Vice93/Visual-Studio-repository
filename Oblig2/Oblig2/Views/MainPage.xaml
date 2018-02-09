@@ -12,18 +12,28 @@
     <Grid Width="auto" Height="auto" Background="Gray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Button Name="compressBtn" Content="Compress" Click="CompressBtn_Click"></Button>
-        </Grid>
         <Grid Grid.Row="1">
-            <Button Name="deCompressBtn" Content="Decompress" Click="DeCompressBtn_Click"></Button>
+            <Button Name="pickFile" Content="Select a file" Click="pickFile_Click" Margin="20,0,0,0" Width="110"></Button>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Button Name="compressBtn" Content="Compress" Click="CompressBtn_Click" Margin="20,0,0,0" Width="110"></Button>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Button Name="deCompressBtn" Content="Decompress" Click="DeCompressBtn_Click" Margin="20,0,0,0" Width="110"></Button>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <TextBlock Name="fileSelected" Width="Auto" Margin="30,15,0,0"></TextBlock>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <TextBlock Name="compressedInfo" Width="Auto" Margin="30,15,0,0"></TextBlock>
         </Grid>
     </Grid>
 </Page>
