@@ -4,7 +4,7 @@ using Oblig4.Model;
 
 namespace Oblig4.Context
 {
-    public partial class DatabaseContext : DbContext
+    public class DatabaseContext : DbContext
     {
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
@@ -13,7 +13,7 @@ namespace Oblig4.Context
         {
             Configuration.ProxyCreationEnabled = false;
 
-            Database.SetInitializer(new DBInitializer());
+            Database.SetInitializer(new DbInitializer());
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

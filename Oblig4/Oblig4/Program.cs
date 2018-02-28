@@ -14,8 +14,7 @@ namespace Oblig4
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Welcome to the student/course application.");
             SelectionInfo();
@@ -90,8 +89,8 @@ namespace Oblig4
         {
             GetDataFromDb("Course");
             Console.WriteLine("Specify the ID of the course you want to check");
-            var courseID = Console.ReadLine();
-            bool isNumeric = int.TryParse(courseID, out int n);
+            var courseId = Console.ReadLine();
+            bool isNumeric = int.TryParse(courseId, out int cId);
             if (isNumeric)
             {
                 try
@@ -99,7 +98,7 @@ namespace Oblig4
                     using (var con = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Oblig4.Context.DatabaseContext;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"))
                     {
                         con.Open();
-                        using (SqlCommand cmd = new SqlCommand("SELECT * FROM Student WHERE StudentId IN (SELECT StudentId FROM StudentCourse WHERE CourseId = " + courseID + ")", con))
+                        using (SqlCommand cmd = new SqlCommand("SELECT * FROM Student WHERE StudentId IN (SELECT StudentId FROM StudentCourse WHERE CourseId = " + cId + ")", con))
                         {
                             using (SqlDataReader reader = cmd.ExecuteReader())
                             {
@@ -133,14 +132,14 @@ namespace Oblig4
         {
             Console.WriteLine("Specify the ID of a course to add a student to:");
             GetDataFromDb("Course");
-            var courseID = Console.ReadLine();
-            bool isNumeric = int.TryParse(courseID, out int n);
+            var courseId = Console.ReadLine();
+            bool isNumeric = int.TryParse(courseId, out int cId);
             if (isNumeric)
             {
                 Console.WriteLine("Specify the ID of the student to add to this course:");
                 GetDataFromDb("Student");
-                var studentID = Console.ReadLine();
-                isNumeric = int.TryParse(studentID, out n);
+                var studentId = Console.ReadLine();
+                isNumeric = int.TryParse(studentId, out int sId);
                 if (isNumeric)
                 {
                     try
@@ -149,10 +148,10 @@ namespace Oblig4
                         {
                             con.Open();
                             SqlCommand cmd = new SqlCommand("INSERT INTO StudentCourse (StudentId,CourseId) VALUES('"
-                                                    + studentID + "','" + courseID + "')", con);
+                                                    + sId + "','" + cId + "')", con);
                             cmd.ExecuteReader();
                             con.Close();
-                            Console.WriteLine("Added student " + studentID + " to course " + courseID);
+                            Console.WriteLine("Added student " + sId + " to course " + cId);
                         }
                     }
                     catch (SqlException e)
@@ -179,14 +178,11 @@ namespace Oblig4
         {
             using (var db = new DatabaseContext())
             {
-                string title;
-                string fName;
-                string lName;
                 string format = "yyyy.MM.dd";
                 if (table == "Course")
                 {
                     Console.WriteLine("Please write the course title.");
-                    title = Console.ReadLine();
+                    string title = Console.ReadLine();
 
                     var course = new Course() { Title = title };
                     db.Courses.Add(course);
@@ -197,9 +193,9 @@ namespace Oblig4
                 else if (table == "Student")
                 {
                     Console.WriteLine("Please write the students first name");
-                    fName = Console.ReadLine();
+                    string fName = Console.ReadLine();
                     Console.WriteLine("Please write the students last name");
-                    lName = Console.ReadLine();
+                    string lName = Console.ReadLine();
                     Console.WriteLine("Please write the students birth date (Format: YYYY.MM.DD");
                     string d = Console.ReadLine();
                     if (DateTime.TryParseExact(d, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))

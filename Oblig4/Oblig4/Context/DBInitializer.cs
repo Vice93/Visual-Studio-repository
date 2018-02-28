@@ -2,7 +2,7 @@
 
 namespace Oblig4.Context
 {
-    public class DBInitializer : DropCreateDatabaseIfModelChanges<DatabaseContext>
+    public class DbInitializer : DropCreateDatabaseIfModelChanges<DatabaseContext>
     {
         protected override void Seed(DatabaseContext context)
         {
