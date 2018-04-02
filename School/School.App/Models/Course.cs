@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using School.App.Annotations;
 
-namespace School.Model
+namespace School.App.Models
 {
     public class Course : INotifyPropertyChanged
     {

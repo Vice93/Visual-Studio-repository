@@ -9,7 +9,7 @@
       xmlns:local="using:School.App.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:School.App.ViewModels"
-      xmlns:model="using:School.Model"
+      xmlns:model="using:School.App.Models"
       mc:Ignorable="d">
 
     <Page.DataContext>

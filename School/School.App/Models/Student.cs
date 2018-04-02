@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace School.Model
+namespace School.App.Models
 {
     public class Student
     {

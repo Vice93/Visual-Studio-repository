@@ -9,8 +9,8 @@ using Windows.Devices.Bluetooth.Advertisement;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
 using Newtonsoft.Json;
+using School.App.Models;
 using School.App.Views;
-using School.Model;
 using Template10.Mvvm;
 
 namespace School.App.ViewModels
@@ -50,12 +50,12 @@ namespace School.App.ViewModels
                     {
                         d.CourseList.Items.Add(course); //WHY THE FUCK WONT IT SHOW....
                        
+
+
                         Debug.WriteLine("Added object with id: " + course.CourseId);
                     }
 
-                    //Listview.Items.AddRange(d.courselist.items);
-                    Debug.WriteLine(d.CourseList.Items.Count);
-
+                    
                     
                 }
             }
