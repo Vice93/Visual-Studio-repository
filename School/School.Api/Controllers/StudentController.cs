@@ -19,6 +19,22 @@ namespace School.Api.Controllers
             return ApiModel.GetAllStudents();
         }
 
+        // GET: api/studenthas/5
+        [HttpGet]
+        [Route("api/studenthas/{id:int}")]
+        public List<StudentCourse> StudentHas(int id)
+        {
+            return ApiModel.StudentHasCourse(id);
+        }
+
+        // GET: api/studenthascourse
+        [HttpGet]
+        [Route("api/studenthascourse")]
+        public List<StudentCourse> GetAllStudentCourse()
+        {
+            return ApiModel.AllStudentCourse();
+        }
+
         // GET api/Student/5
         [HttpGet]
         [Route("api/student/{id:int}")]

@@ -58,14 +58,20 @@
         </controls:PageHeader>
 
         <Button x:Name="LoadCourseBtn"
-                Click="{x:Bind ViewModel.GetCourses}" Content="Get Courses From DB"
+                Click="{x:Bind GetCourses}" Content="Get Courses From DB"
                 RelativePanel.Below="pageHeader"
                 Margin="20">
         </Button>
         <Button x:Name="LoadStudentBtn"
-                Click="{x:Bind ViewModel.GetCourses}" Content="Get Students From DB"
+                Click="{x:Bind GetStudents}" Content="Get Students From DB"
                 RelativePanel.Below="pageHeader"
                 RelativePanel.RightOf="LoadCourseBtn"
+                Margin="20">
+        </Button>
+        <Button x:Name="ThirdBut"
+                Click="{x:Bind ViewModel.Update}" Content="UPDATE DA!"
+                RelativePanel.Below="pageHeader"
+                RelativePanel.RightOf="LoadStudentBtn"
                 Margin="20">
         </Button>
 
@@ -83,7 +89,7 @@
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"  >
-                        <TextBlock Text="CourseId" Margin="8,0" Width="60" Foreground="DarkRed" />
+                        <TextBlock Text="CourseId" Margin="8,0" Width="70" Foreground="DarkRed" />
                         <TextBlock Text="Course Name" Width="300" Foreground="DarkRed" />
                         <TextBlock Text="Points" Width="200" Foreground="DarkRed" />
                     </StackPanel>
@@ -94,7 +100,7 @@
                     <StackPanel Orientation="Horizontal" >
                         <TextBlock Name="CourseId"
                                     Text="{x:Bind CourseId}"
-                                    Width="50" />
+                                    Width="70" />
                         <TextBlock Name="ItemName"
                                     Text="{x:Bind CourseName}"
                                     Width="300" />
@@ -106,7 +112,8 @@
         </ListView>
 
         <ListView Name="StudentList"
-                  RelativePanel.Below="CourseList"
+                  RelativePanel.Below="LoadCourseBtn"
+                  RelativePanel.RightOf="CourseList"
                   SelectionMode="Single"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.IsVerticalRailEnabled="True"
@@ -118,7 +125,7 @@
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"  >
-                        <TextBlock Text="StudentId" Margin="8,0" Width="60" Foreground="DarkRed" />
+                        <TextBlock Text="StudentId" Margin="8,0" Width="70" Foreground="DarkRed" />
                         <TextBlock Text="Student Name" Width="300" Foreground="DarkRed" />
                         <TextBlock Text="Started on Date" Width="200" Foreground="DarkRed" />
                     </StackPanel>
@@ -129,7 +136,7 @@
                     <StackPanel Orientation="Horizontal" >
                         <TextBlock Name="CourseId"
                                    Text="{x:Bind StudentId}"
-                                   Width="50" />
+                                   Width="70" />
                         <TextBlock Name="ItemName" Width="300" >
                             <Run Text="{x:Bind FirstName}"/>
                             <Run Text="{x:Bind LastName}"/>

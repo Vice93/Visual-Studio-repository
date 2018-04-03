@@ -85,7 +85,41 @@ namespace School.App.DataAccess
             }
         }
 
+        public void StudentHasCourse(string connectionString)
+        {
+            string GetStudentCoursesQuery = "select * from dbo.StudentHasCourse";
 
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    if (conn.State == System.Data.ConnectionState.Open)
+                    {
+                        using (var cmd = conn.CreateCommand())
+                        {
+                            cmd.CommandText = GetStudentCoursesQuery;
+                            using (var reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    var studhasCourse = new StudentCourse
+                                    {
+                                        StudentId = reader.GetInt32(0),
+                                        CourseId = reader.GetInt32(1),
+                                    };
+                                    ApiModel.CreateStudentCourse(studhasCourse);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception eSql)
+            {
+                Debug.WriteLine("Exception: " + eSql.Message);
+            }
+        }
 
     }
 }

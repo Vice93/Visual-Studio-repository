@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,17 +82,27 @@ namespace School.Model
             }
         };
 
+        private static List<StudentCourse> studCourse = new List<StudentCourse>()
+        {
+            new StudentCourse
+            {
+                CourseId = 1040,
+                StudentId = 5543
+            }
+        };
+
         // C part of CRUD
         public static void CreateStudent(Student student)
         {
-            if (students.Any(s => s.StudentId == student.StudentId))
-            {
-                //If the student from the DB already exists in the system, do not create it
-            }
-            else
+            if (!students.Any(s => s.StudentId == student.StudentId))
             {
                 students.Add(student);
             }
+        }
+
+        public static void CreateStudentCourse(StudentCourse sc)
+        {
+            studCourse.Add(sc);
         }
 
         // R part of CRUD
@@ -122,11 +133,7 @@ namespace School.Model
         // C part of CRUD
         public static void CreateCourse(Course course)
         {
-            if (courses.Any(c => c.CourseId == course.CourseId))
-            {
-                //If the course from the DB already exists in the system, do not create it
-            }
-            else
+            if (!courses.Any(c => c.CourseId == course.CourseId))
             {
                 courses.Add(course);
             }
@@ -166,6 +173,28 @@ namespace School.Model
         {
             DbInitializer d = new DbInitializer();
             d.GetCourses(ConnectionString);
+        }
+
+        public static List<StudentCourse> AllStudentCourse()
+        {
+            studCourse.Clear();
+            DbInitializer d = new DbInitializer();
+            d.StudentHasCourse(ConnectionString);
+
+            return studCourse;
+        }
+
+        public static List<StudentCourse> StudentHasCourse(int id)
+        {
+            List<StudentCourse> sList = new List<StudentCourse>();
+            foreach(var c in studCourse)
+            {
+                if(c.StudentId == id)
+                {
+                    sList.Add(c);
+                }
+            }
+            return sList;
         }
     }
 }

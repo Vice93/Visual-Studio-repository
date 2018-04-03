@@ -19,24 +19,32 @@ namespace School.App.ViewModels
     {
         public static Uri BaseUri = new Uri("http://localhost:56921/api"); // Base api url
 
-        public static Frame RootFrame { get; set; }
-        public static User ActiveUser { get; set; }
+        //I need to figure out how to check for both studId and course Id in one loop when I create the objects, but for now run it when user opens the view.
+        public void RunOnce()
+        {
+            var client = new HttpClient();
+            {
+                Debug.WriteLine("Student Has course");
+                Task.Run(async () => await client.GetStringAsync(BaseUri + "/studenthascourse"));
+            }
+        }
 
         public void Update()
         {
-            using (var client = new HttpClient())
+            var client = new HttpClient();
             {
+                Debug.WriteLine("Fetched the data from the database");
                 Task.Run(async () => await client.GetStringAsync(BaseUri + "/update"));
             }
         }
 
 
-        public void GetCourses()
+        public List<Course> GetCourses()
         {
             try
             {
 
-                var client = new HttpClient();
+                using (var client = new HttpClient())
                 {
                     var response = "";
 
@@ -44,27 +52,58 @@ namespace School.App.ViewModels
 
                     task.Wait();
 
-                    DatabaseInfo d = new DatabaseInfo();
-                    d.CourseList.Items.Clear();
-                    foreach (var course in JsonConvert.DeserializeObject<List<Course>>(response))
-                    {
-                        d.CourseList.Items.Add(course); //WHY THE FUCK WONT IT SHOW....
-                       
-
-
-                        Debug.WriteLine("Added object with id: " + course.CourseId);
-                    }
-
-                    
-                    
+                    return JsonConvert.DeserializeObject<List<Course>>(response);
                 }
             }
             catch (NullReferenceException e)
             {
                 Debug.WriteLine("Exception: " + e);
             }
- 
+            return new List<Course>();
         }
 
+        public List<Student> GetStudents()
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var response = "";
+
+                    Task task = Task.Run(async () => { response = await client.GetStringAsync(BaseUri + "/students"); });
+
+                    task.Wait();
+
+                    return JsonConvert.DeserializeObject<List<Student>>(response);
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Exception: " + e);
+            }
+            return new List<Student>();
+        }
+
+        public List<StudentCourse> GetStudentHasCourses(int id)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var response = "";
+
+                    Task task = Task.Run(async () => { response = await client.GetStringAsync(BaseUri + "/studenthas/" + id); });
+                    
+                    task.Wait();
+                    
+                    return JsonConvert.DeserializeObject<List<StudentCourse>>(response);
+                }
+            }
+            catch (NullReferenceException e)
+            {
+                Debug.WriteLine("Exception: " + e);
+            }
+            return new List<StudentCourse>();
+        }
     }
 }
