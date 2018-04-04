@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace School.App.Models
 {
-    public class Student
+    public class Student : INotifyPropertyChanged
     {
         public int StudentId { get; set; }
 
@@ -15,6 +15,15 @@ namespace School.App.Models
         public string FullName => FirstName + " " + LastName;
 
         public DateTime StartedOnDateTime { get; set; }
-        
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }

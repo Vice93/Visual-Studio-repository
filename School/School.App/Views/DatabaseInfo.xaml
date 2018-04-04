@@ -15,7 +15,6 @@
     <Page.DataContext>
         <vm:AppViewModel x:Name="ViewModel" />
     </Page.DataContext>
-
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <VisualStateManager.VisualStateGroups>
@@ -76,6 +75,7 @@
         </Button>
 
         <ListView Name="CourseList"
+                  d:DataContext="{d:DesignInstance model:SampleData, IsDesignTimeCreatable=True}"
                   RelativePanel.Below="LoadCourseBtn"
                   SelectionMode="Single"
                   x:FieldModifier="public"

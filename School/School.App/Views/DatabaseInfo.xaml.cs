@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using School.App.ViewModels;
+using School.App.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,13 +26,26 @@ namespace School.App.Views
     public partial class DatabaseInfo : Page
     {
         AppViewModel a;
+        SampleData s;
+
         public DatabaseInfo()
         {
+            s = new SampleData();
             InitializeComponent();
 
             a = new AppViewModel();
+
+            //StudentList.ItemsSource = s.Students;
+            
             
         }
+
+        public class Sample
+        {
+            
+        }
+
+        
 
         public void GetCourses()
         {
