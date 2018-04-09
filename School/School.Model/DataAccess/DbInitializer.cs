@@ -6,35 +6,33 @@
     using System.Linq;
     using School.Model;
 
-namespace School.App.DataAccess
+namespace School.Model.DataAccess
 {
     public class DbInitializer
     {
         public void GetCourses(string connectionString)
         {
-            const string GetCoursesQuery = "select CourseId, CourseName, Points from dbo.Course";
+            const string getCoursesQuery = "select CourseId, CourseName, Points from dbo.Course";
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    if (conn.State == System.Data.ConnectionState.Open)
+                    if (conn.State != System.Data.ConnectionState.Open) return;
+                    using (var cmd = conn.CreateCommand())
                     {
-                        using (var cmd = conn.CreateCommand())
+                        cmd.CommandText = getCoursesQuery;
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            cmd.CommandText = GetCoursesQuery;
-                            using (var reader = cmd.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
+                                var course = new Course
                                 {
-                                    var course = new Course
-                                    {
-                                        CourseId = reader.GetInt32(0),
-                                        CourseName = reader.GetString(1),
-                                        Points = reader.GetInt32(2)
-                                    };
-                                    ApiModel.CreateCourse(course);
-                                }
+                                    CourseId = reader.GetInt32(0),
+                                    CourseName = reader.GetString(1),
+                                    Points = reader.GetInt32(2)
+                                };
+                                ApiModel.CreateCourse(course);
                             }
                         }
                     }
@@ -48,33 +46,31 @@ namespace School.App.DataAccess
 
         public void GetStudents(string connectionString)
         {
-            const string GetStudentsQuery = "select StudentId, FirstName, LastName, StartedOn from dbo.Student;";
+            const string getStudentsQuery = "select StudentId, FirstName, LastName, StartedOn from dbo.Student;";
 
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    if (conn.State == System.Data.ConnectionState.Open)
+                    if (conn.State != System.Data.ConnectionState.Open) return;
+                    using (var cmd = conn.CreateCommand())
                     {
-                        using (var cmd = conn.CreateCommand())
+                        cmd.CommandText = getStudentsQuery;
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            cmd.CommandText = GetStudentsQuery;
-                            using (var reader = cmd.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
+                                var student = new Student
                                 {
-                                    var student = new Student
-                                    {
-                                        StudentId = reader.GetInt32(0),
-                                        FirstName = reader.GetString(1),
-                                        LastName = reader.GetString(2),
-                                        StartedOnDateTime = reader.GetDateTime(3)
-                                    };
-                                    ApiModel.CreateStudent(student);
-                                }
-                                
+                                    StudentId = reader.GetInt32(0),
+                                    FirstName = reader.GetString(1),
+                                    LastName = reader.GetString(2),
+                                    StartedOnDateTime = reader.GetDateTime(3)
+                                };
+                                ApiModel.CreateStudent(student);
                             }
+                                
                         }
                     }
                 }
@@ -87,29 +83,27 @@ namespace School.App.DataAccess
 
         public void StudentHasCourse(string connectionString)
         {
-            string GetStudentCoursesQuery = "select * from dbo.StudentHasCourse";
+            const string getStudentCoursesQuery = "select * from dbo.StudentHasCourse";
 
             try
             {
                 using (var conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    if (conn.State == System.Data.ConnectionState.Open)
+                    if (conn.State != System.Data.ConnectionState.Open) return;
+                    using (var cmd = conn.CreateCommand())
                     {
-                        using (var cmd = conn.CreateCommand())
+                        cmd.CommandText = getStudentCoursesQuery;
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            cmd.CommandText = GetStudentCoursesQuery;
-                            using (var reader = cmd.ExecuteReader())
+                            while (reader.Read())
                             {
-                                while (reader.Read())
+                                var studhasCourse = new StudentCourse
                                 {
-                                    var studhasCourse = new StudentCourse
-                                    {
-                                        StudentId = reader.GetInt32(0),
-                                        CourseId = reader.GetInt32(1),
-                                    };
-                                    ApiModel.CreateStudentCourse(studhasCourse);
-                                }
+                                    StudentId = reader.GetInt32(0),
+                                    CourseId = reader.GetInt32(1),
+                                };
+                                ApiModel.CreateStudentCourse(studhasCourse);
                             }
                         }
                     }

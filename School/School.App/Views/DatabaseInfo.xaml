@@ -8,74 +8,41 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:School.App.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:vm="using:School.App.ViewModels"
       xmlns:model="using:School.App.Models"
-      mc:Ignorable="d">
+      xmlns:viewModels="using:School.App.ViewModels"
+      mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModels:AppViewModel, IsDesignTimeCreatable=True}">
 
     <Page.DataContext>
-        <vm:AppViewModel x:Name="ViewModel" />
+        <viewModels:AppViewModel x:Name="ViewModel" />
     </Page.DataContext>
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
-                <VisualState x:Name="VisualStateNarrow">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <!--  TODO: change properties for narrow view  -->
-                        <Setter Target="stateTextBox.Text" Value="Narrow Visual State" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="VisualStateNormal">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <!--  TODO: change properties for normal view  -->
-                        <Setter Target="stateTextBox.Text" Value="Normal Visual State" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState x:Name="VisualStateWide">
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <!--  TODO: change properties for wide view  -->
-                        <Setter Target="stateTextBox.Text" Value="Wide Visual State" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
 
-        <controls:PageHeader x:Name="pageHeader" RelativePanel.AlignLeftWithPanel="True"
+        <controls:PageHeader x:Name="PageHeader" RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True" Text="Main Page">
-
-
+                             RelativePanel.AlignTopWithPanel="True" Text="Course/Student Page">
         </controls:PageHeader>
 
         <Button x:Name="LoadCourseBtn"
                 Click="{x:Bind GetCourses}" Content="Get Courses From DB"
-                RelativePanel.Below="pageHeader"
+                RelativePanel.Below="PageHeader"
                 Margin="20">
         </Button>
         <Button x:Name="LoadStudentBtn"
                 Click="{x:Bind GetStudents}" Content="Get Students From DB"
-                RelativePanel.Below="pageHeader"
+                RelativePanel.Below="PageHeader"
                 RelativePanel.RightOf="LoadCourseBtn"
                 Margin="20">
         </Button>
         <Button x:Name="ThirdBut"
                 Click="{x:Bind ViewModel.Update}" Content="UPDATE DA!"
-                RelativePanel.Below="pageHeader"
+                RelativePanel.Below="PageHeader"
                 RelativePanel.RightOf="LoadStudentBtn"
                 Margin="20">
         </Button>
 
         <ListView Name="CourseList"
-                  d:DataContext="{d:DesignInstance model:SampleData, IsDesignTimeCreatable=True}"
+                  ItemsSource="{Binding SampleModelCourse}"
                   RelativePanel.Below="LoadCourseBtn"
                   SelectionMode="Single"
                   x:FieldModifier="public"
@@ -85,13 +52,13 @@
                   ScrollViewer.HorizontalScrollMode="Enabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ScrollViewer.IsHorizontalRailEnabled="True"
-                  Margin="20">
+                  Margin="20,20,20,-370">
             <ListView.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"  >
                         <TextBlock Text="CourseId" Margin="8,0" Width="70" Foreground="DarkRed" />
-                        <TextBlock Text="Course Name" Width="300" Foreground="DarkRed" />
-                        <TextBlock Text="Points" Width="200" Foreground="DarkRed" />
+                        <TextBlock Text="Course Name" Width="160" Foreground="DarkRed" />
+                        <TextBlock Text="Points" Width="50" Foreground="DarkRed" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.HeaderTemplate>
@@ -101,17 +68,18 @@
                         <TextBlock Name="CourseId"
                                     Text="{x:Bind CourseId}"
                                     Width="70" />
-                        <TextBlock Name="ItemName"
+                        <TextBlock Name="CourseName"
                                     Text="{x:Bind CourseName}"
-                                    Width="300" />
+                                    Width="160" />
                         <TextBlock Text="{x:Bind Points}"
-                                   Width="200" />
+                                   Width="50" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
         <ListView Name="StudentList"
+                  ItemsSource="{Binding SampleModelStudent}"
                   RelativePanel.Below="LoadCourseBtn"
                   RelativePanel.RightOf="CourseList"
                   SelectionMode="Single"
@@ -126,23 +94,23 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"  >
                         <TextBlock Text="StudentId" Margin="8,0" Width="70" Foreground="DarkRed" />
-                        <TextBlock Text="Student Name" Width="300" Foreground="DarkRed" />
-                        <TextBlock Text="Started on Date" Width="200" Foreground="DarkRed" />
+                        <TextBlock Text="Student Name" Width="200" Foreground="DarkRed" />
+                        <TextBlock Text="Started on Date" Width="140" Foreground="DarkRed" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.HeaderTemplate>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Student">
                     <StackPanel Orientation="Horizontal" >
-                        <TextBlock Name="CourseId"
+                        <TextBlock Name="StudentId"
                                    Text="{x:Bind StudentId}"
                                    Width="70" />
-                        <TextBlock Name="ItemName" Width="300" >
-                            <Run Text="{x:Bind FirstName}"/>
-                            <Run Text="{x:Bind LastName}"/>
+                        <TextBlock Name="StudentName" Width="200" 
+                                   Text="{Binding FullName}">
                         </TextBlock>
-                        <TextBlock Text="{x:Bind StartedOnDateTime}"
-                                   Width="200" />
+                        <TextBlock Name="StudentStartedOn" 
+                                   Text="{x:Bind StartedOnDateTime}"
+                                   Width="140" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

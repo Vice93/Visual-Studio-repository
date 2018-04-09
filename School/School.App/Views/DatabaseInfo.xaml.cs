@@ -25,41 +25,30 @@ namespace School.App.Views
     /// </summary>
     public partial class DatabaseInfo : Page
     {
-        AppViewModel a;
-        SampleData s;
+        private readonly AppViewModel _a;
 
         public DatabaseInfo()
         {
-            s = new SampleData();
             InitializeComponent();
 
-            a = new AppViewModel();
-
-            //StudentList.ItemsSource = s.Students;
-            
-            
-        }
-
-        public class Sample
-        {
-            
+            _a = new AppViewModel();
         }
 
         
 
         public void GetCourses()
         {
-            CourseList.ItemsSource = a.GetCourses();
+            CourseList.ItemsSource = _a.GetCourses();
         }
 
         public void GetStudents()
         {
-            StudentList.ItemsSource = a.GetStudents();
+            StudentList.ItemsSource = _a.GetStudents();
         }
 
         public void Update()
         {
-            a.Update();
+            _a.Update();
         }
 
     }

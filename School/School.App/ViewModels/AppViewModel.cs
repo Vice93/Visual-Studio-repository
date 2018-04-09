@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.System;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using Newtonsoft.Json;
 using School.App.Models;
-using School.App.Views;
 using Template10.Mvvm;
 
 namespace School.App.ViewModels
@@ -18,6 +19,17 @@ namespace School.App.ViewModels
     public class AppViewModel : ViewModelBase
     {
         public static Uri BaseUri = new Uri("http://localhost:56921/api"); // Base api url
+
+        public ObservableCollection<Course> SampleModelCourse { get; set; }
+        public ObservableCollection<Student> SampleModelStudent { get; set; }
+        private SampleModel s;
+
+        public AppViewModel()
+        {
+            s = new SampleModel();
+            SampleModelCourse = s.SampleListCourse;
+            SampleModelStudent = s.SampleListStudent;
+        }
 
         //I need to figure out how to check for both studId and course Id in one loop when I create the objects, but for now run it when user opens the view.
         public void RunOnce()

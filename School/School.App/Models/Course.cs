@@ -8,9 +8,9 @@ namespace School.App.Models
 {
     public class Course : INotifyPropertyChanged
     {
-        private int courseId;
-        private string courseName;
-        private int points;
+        private int _courseId;
+        private string _courseName;
+        private int _points;
 
         protected bool SetField<Course>(ref Course field, Course value,
             [CallerMemberName] string propertyName = null)
@@ -23,20 +23,20 @@ namespace School.App.Models
 
         public int CourseId
         {
-            get => courseId;
-            set => SetField(ref courseId, value, nameof(courseId)); 
+            get => _courseId;
+            set => SetField(ref _courseId, value, nameof(_courseId)); 
         }
 
 
         public string CourseName {
-            get => courseName;
-            set => SetField(ref courseName, value, nameof(courseName));
+            get => _courseName;
+            set => SetField(ref _courseName, value, nameof(_courseName));
         }
 
         public int Points
         {
-            get => points;
-            set => SetField(ref points, value, nameof(points));
+            get => _points;
+            set => SetField(ref _points, value, nameof(_points));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

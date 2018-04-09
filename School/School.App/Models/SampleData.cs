@@ -33,6 +33,12 @@ namespace School.App.Models
                     CourseId = 1032,
                     CourseName = "Sample Course 3",
                     Points = 10
+                },
+                new Course()
+                {
+                    CourseId = 1033,
+                    CourseName = "Sample Course 4",
+                    Points = 10
                 }
             };
             Students = new ObservableCollection<Student>()
@@ -56,6 +62,13 @@ namespace School.App.Models
                     StudentId = 5562,
                     FirstName = "fName3",
                     LastName = "lName3",
+                    StartedOnDateTime = DateTime.Now
+                },
+                new Student()
+                {
+                    StudentId = 5564,
+                    FirstName = "fName4",
+                    LastName = "lName4",
                     StartedOnDateTime = DateTime.Now
                 }
             };

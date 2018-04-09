@@ -45,7 +45,7 @@ namespace School.Api.Controllers
 
         // POST api/Student
         [HttpPost]
-        [Route("api/student/{id:int}")]
+        [Route("api/student/{value}")]
         public void Post(string value)
         {
             var student = JsonConvert.DeserializeObject<Student>(value); // Convert JSON to Users
