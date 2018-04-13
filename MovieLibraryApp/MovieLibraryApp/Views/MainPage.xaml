@@ -24,6 +24,16 @@
             Height="150" 
             Source="/Assets/banner.jpg" 
             />
+        <TextBlock 
+            FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
+            FontSize="25"
+            RelativePanel.AlignBottomWith="BannerImage"
+            Name="BannerTitle"
+            Margin="0,0,60,30"
+            RelativePanel.AlignRightWithPanel="True"
+            Foreground="#f5f5f5"
+            Text="BANNER MOVIE TITLE"
+            />
 
         <TextBox 
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
@@ -63,7 +73,7 @@
                     <DataTemplate>
                         <StackPanel Orientation="Vertical"
                             Background="#EBEBEB"  
-                            Margin="20,20,20,20"
+                            Margin="20,20,20,10"
                             HorizontalAlignment="Center"
                             CornerRadius="5">
 
@@ -76,9 +86,11 @@
                                     Stretch="UniformToFill">
                                 </Image>
                             </StackPanel>
-                            <StackPanel Padding="10,3,3,3">
+                            <StackPanel 
+                                HorizontalAlignment="Center"
+                                Padding="10,3,3,3">
                                 <TextBlock  
-                                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
+                                    FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
                                     Width="150" 
                                     Height="20" 
                                     TextWrapping="Wrap"
