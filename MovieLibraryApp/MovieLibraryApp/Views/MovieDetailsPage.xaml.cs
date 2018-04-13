@@ -1,7 +1,5 @@
-﻿using MovieLibrary.Model.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,13 +22,9 @@ namespace MovieLibraryApp.Views
     /// </summary>
     public sealed partial class MovieDetailsPage : Page
     {
-        public List<Movie> test = new List<Movie>();
-        ApiModel a = new ApiModel();
         public MovieDetailsPage()
         {
             this.InitializeComponent();
-            test = a.Search("gladiator");
-            Debug.WriteLine(test.Count);
         }
     }
 }

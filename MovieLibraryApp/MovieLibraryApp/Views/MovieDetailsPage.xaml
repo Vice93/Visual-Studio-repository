@@ -43,7 +43,6 @@
             <Border
                 Background="#424242">
                 <TextBlock
-                    Name="MovieTitle"
                     FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
                     Foreground="#fafafa"
                     Padding="20,10,0,10"
@@ -54,49 +53,42 @@
             </Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock
-                    Name="PgRating"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
+                    FontSize="12"
                     Margin="5,5,5,5"
                     Text="PG-13"/>
                 <TextBlock
                     FontSize="12"
-                    Margin="5,2,5,5"
+                    Margin="5,5,5,5"
                     Text="|"/>
                 <TextBlock
-                    Name="Duration"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
+                    FontSize="12"
                     Margin="5,5,5,5"
                     Text="2h 14min"/>
                 <TextBlock
                     FontSize="12"
-                    Margin="5,2,5,5"
+                    Margin="5,5,5,5"
                     Text="|"/>
                 <TextBlock
-                    Name="Genre"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
+                    FontSize="12"
                     Margin="5,5,5,5"
                     Text="Action, Adventure, Sci-fi"/>
                 <TextBlock
                     FontSize="12"
-                    Margin="5,2,5,5"
+                    Margin="5,5,5,5"
                     Text="|"/>
                 <TextBlock
-                    Name="ReleaseDate"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
+                    FontSize="12"
                     Margin="5,5,5,5"
                     Text="16 February 2018 (USA)"/>
             </StackPanel>
             <TextBlock
-                FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
                 Margin="10,10,10,10"
                 TextWrapping="Wrap"
                 Text="&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&quot;"
                 ></TextBlock>
             
+
+
         </StackPanel>
     </RelativePanel>
 </Page>

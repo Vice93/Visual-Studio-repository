@@ -94,49 +94,5 @@
                 <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Movie" GroupName="searchType" />
             </StackPanel>
         </StackPanel>
-
-        <Grid
-            RelativePanel.RightOf="SearchInput"
-            RelativePanel.AlignRightWithPanel="True">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Height="210">
-            </Grid>
-            <GridView Grid.Row="1" 
-                Name="MainGrid"
-                IsItemClickEnabled="True"
-                ItemsSource="/Assets/banner.jpg">
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical"
-                            Background="#EBEBEB"  
-                            Margin="20,20,20,20"
-                            HorizontalAlignment="Center"
-                            CornerRadius="5">
-                            <StackPanel 
-                                Background="#424242">
-                                <Image
-                                    Source="/Assets/poster.jpg"
-                                    Width="170"
-                                    Height="100"
-                                    Stretch="UniformToFill">
-                                </Image>
-                            </StackPanel>
-                            <StackPanel Padding="10,3,3,3">
-                                <TextBlock  
-                                    FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
-                                    Width="150" 
-                                    Height="20" 
-                                    TextWrapping="Wrap"
-                                    Text="MOVIE TITLE">
-                                </TextBlock>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
-        </Grid>
     </RelativePanel>
 </Page>
