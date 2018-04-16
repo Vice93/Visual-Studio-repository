@@ -70,14 +70,14 @@
             <GridView Grid.Row="1" 
                 Name="MainGrid"
                 IsItemClickEnabled="True"
+                Tapped="{x:Bind ViewModel.GoToMovieDetailsPage}"
+                SelectedItem="{Binding MovieObject, Mode=TwoWay}"
                 >
-
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="model:Movie">
                         <StackPanel Orientation="Vertical"
                             Name="MovieBox"
                             Background="#EBEBEB"
-                            Tapped="MovieBox_OnTapped"
                             Margin="20,20,20,10"
                             HorizontalAlignment="Center"
                             Tag="{Binding MovieId}"

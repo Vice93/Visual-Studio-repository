@@ -5,6 +5,7 @@
     xmlns:local="using:MovieLibraryApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="using:MovieLibrary.Models.Model"
     mc:Ignorable="d">
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -37,19 +38,23 @@
             Text="Advanced Search"
         />
         <TextBox 
-            Name="SearchInput"
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-            RelativePanel.Below="AdvancedSearchText"
-            Margin="25,10,0,0"
+            Name="SearchInput"
+            RelativePanel.Below="BannerImage"
+            Margin="25,10,10,0"
             Height="40"
             Width="300"
-            Padding="25,15,0,0"
+            Padding="20,15,0,0"
             BorderThickness="0"
+            KeyUp="SearchInput_OnKeyUp"
             Foreground="DarkGray"
             PlaceholderText="Search movies" />
         <SymbolIcon
+            Name="SearchIcon"
+            RelativePanel.AlignRightWith="SearchInput"
             RelativePanel.AlignVerticalCenterWith="SearchInput"
-            Margin="24,15,0,0"
+            Margin="0,15,0,0"
+            Tapped="SearchIcon_OnTapped"
             Symbol="Find">
         </SymbolIcon>
 
@@ -59,17 +64,16 @@
             RelativePanel.Below="SearchInput"
             Margin="25,15,0,0"
             Text="Genre"
-            FontSize="20"
-            />
+            FontSize="20"/>
         <ComboBox
             Name="GenreCombo"
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
             PlaceholderText="Select a genre"
             RelativePanel.Below="GenreText"
-            Margin="25,10,0,0"
-            >
-            <ComboBoxItem >Test</ComboBoxItem>
-            <ComboBoxItem>Test2</ComboBoxItem>
+            Margin="25,10,0,0">
+            <ComboBoxItem>Drama</ComboBoxItem>
+            <ComboBoxItem>Comedy</ComboBoxItem>
+            <ComboBoxItem></ComboBoxItem>
         </ComboBox>
 
         <TextBlock
@@ -78,8 +82,7 @@
             RelativePanel.Below="GenreCombo"
             Margin="25,20,0,0"
             Text="Year"
-            FontSize="20"
-            />
+            FontSize="20"/>
         <ComboBox
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
             Name="YearCombo"
@@ -92,8 +95,7 @@
         <StackPanel
             Name="TypeRadioGroup"
             RelativePanel.Below="YearCombo"
-            Margin="25,20,0,0"
-            >
+            Margin="25,20,0,0">
             <TextBlock 
                 FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
                 FontSize="20"
@@ -116,19 +118,19 @@
             </Grid>
             <GridView Grid.Row="1" 
                 Name="MainGrid"
-                IsItemClickEnabled="True"
-                ItemsSource="/Assets/banner.jpg">
+                IsItemClickEnabled="True">
                 <GridView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:Movie">
                         <StackPanel Orientation="Vertical"
                             Background="#EBEBEB"  
+                            Tag="{Binding MovieId}"
                             Margin="20,20,20,20"
                             HorizontalAlignment="Center"
                             CornerRadius="5">
                             <StackPanel 
                                 Background="#424242">
                                 <Image
-                                    Source="/Assets/poster.jpg"
+                                    Source="{Binding ImageReference}"
                                     Width="170"
                                     Height="100"
                                     Stretch="UniformToFill">
@@ -140,7 +142,7 @@
                                     Width="150" 
                                     Height="20" 
                                     TextWrapping="Wrap"
-                                    Text="MOVIE TITLE">
+                                    Text="{Binding MovieName}">
                                 </TextBlock>
                             </StackPanel>
                         </StackPanel>

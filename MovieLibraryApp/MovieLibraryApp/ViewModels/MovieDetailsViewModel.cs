@@ -20,7 +20,13 @@ namespace MovieLibraryApp.ViewModels
         private const string AuthToken = "310a11e6-a408-4367-869f-6307e49ded06";
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
-        public ObservableCollection<Movie> LookUpMovie(string id)
+        public async Task<ObservableCollection<Movie>> GetMoviesAsync(string id)
+        {
+            await Task.Run(() => LookUpMovie(id));
+            return _movieList;
+        }
+
+        public void LookUpMovie(string id)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
 
@@ -29,7 +35,7 @@ namespace MovieLibraryApp.ViewModels
             {
                 var res = "";
 
-                var param = "{\r\n  \"ids\": [\r\n    " + id + "\r\n ],\r\n  \"components\": [\r\n    \"primaryImage\",\r\n    \"keyTraits\"\r\n  ]}";
+                var param = "{\r\n  \"ids\": [\r\n    " + "\"" +  id + "\"" + "\r\n ],\r\n  \"components\": [\r\n    \"primaryImage\",\r\n    \"keyTraits\"\r\n  ]}";
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthToken);
                 Debug.WriteLine(baseUri + param);
@@ -84,7 +90,6 @@ namespace MovieLibraryApp.ViewModels
                         break;
                     }
                 }
-                return _movieList;
             }
         }
     }

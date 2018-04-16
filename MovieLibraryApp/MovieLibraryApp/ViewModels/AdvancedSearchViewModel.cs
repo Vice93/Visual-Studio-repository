@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MovieLibraryApp.ViewModels
 {
-    class AdvancedSearchViewModel
+    public class AdvancedSearchViewModel
     {
+
     }
 }

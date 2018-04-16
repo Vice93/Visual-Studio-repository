@@ -26,5 +26,20 @@ namespace MovieLibraryApp.Views
         {
             this.InitializeComponent();
         }
+
+        private void SearchInput_OnKeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SearchIcon_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Search()
+        {
+
+        }
     }
 }

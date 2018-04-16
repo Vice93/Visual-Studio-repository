@@ -17,9 +17,10 @@ namespace MovieLibraryApp.ViewModels
 
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
+        public Movie MovieObject { get; set; }
 
         public void GotoDetailsPage() =>
-            NavigationService.Navigate(typeof(Views.DetailPage), "");
+            NavigationService.Navigate(typeof(Views.DetailPage));
 
         public void GotoSettings() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 0);
@@ -30,6 +31,11 @@ namespace MovieLibraryApp.ViewModels
         public void GotoAbout() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 2);
 
+        public void GoToMovieDetailsPage() =>
+            NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
+
+
+        //Temporary for testing
         public ObservableCollection<Movie> NormalSearch(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");

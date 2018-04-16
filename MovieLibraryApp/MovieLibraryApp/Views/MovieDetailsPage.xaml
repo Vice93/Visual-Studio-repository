@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <RelativePanel>
         
         <Image 
             Name="BannerImage"
@@ -49,7 +49,6 @@
                                 Height="250"/>
 
                             <StackPanel 
-
                                 CornerRadius="5"
                                 Height="250"
                                 Width="500"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,7 +15,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using MovieLibrary.Models.Model;
 using MovieLibraryApp.ViewModels;
+using Newtonsoft.Json;
+using Template10.Services.SerializationService;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,33 +27,28 @@ namespace MovieLibraryApp.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MovieDetailsPage : Page
+    public sealed partial class MovieDetailsPage
     {
-        private MovieDetailsViewModel _mdvm;
+        private readonly MovieDetailsViewModel _mdvm;
+        private readonly ISerializationService _serializationService;
         public MovieDetailsPage()
         {
             InitializeComponent();
-            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
             _mdvm = new MovieDetailsViewModel();
+            _serializationService = SerializationService.Json;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            if (e.Parameter == null)
-            {
-                Debug.WriteLine("E: " + e.Parameter);
-                string text = e.Parameter as string;
-                Debug.WriteLine("Text: " + text);
-                if (text != null)
-                {
-                    Debug.WriteLine("Set itemsource");
-                    MainGrid.ItemsSource = _mdvm.LookUpMovie(text);
-                }
 
-                await Task.CompletedTask;
+            if(e.Parameter != null)
+            {
+                var id = _serializationService.Deserialize(e.Parameter?.ToString()).ToString();
+                var res = await _mdvm.GetMoviesAsync(id);
+                MainGrid.ItemsSource = res;
             }
-            
         }
     }
 }
