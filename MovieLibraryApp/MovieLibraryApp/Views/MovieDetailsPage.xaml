@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MovieLibraryApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:model="using:MovieLibrary.Models.Model"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        
         <Image 
             Name="BannerImage"
             RelativePanel.AlignLeftWithPanel="True"
@@ -17,86 +18,96 @@
             Height="150" 
             Source="/Assets/banner.jpg" 
         />
-        <StackPanel 
-            Name="BannerPanel"
-            CornerRadius="5"
+        <TextBlock 
+            FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
+            FontSize="25"
+            RelativePanel.AlignBottomWith="BannerImage"
+            Name="BannerTitle"
+            Margin="0,0,60,30"
+            RelativePanel.AlignRightWithPanel="True"
+            Foreground="#f5f5f5"
+            Text="Warcraft"
+        />
+        <Grid
             RelativePanel.Below="BannerImage"
-            Margin="60,45,0,0"
-            HorizontalAlignment="Right">
-            <Image
-                Name="MoviePosterImage"
-                Stretch="UniformToFill"
-                Source="/Assets/poster.jpg"
-                Width="150"
-                Height="250"/>
-        </StackPanel>
-        <StackPanel 
+            RelativePanel.AlignHorizontalCenterWith="BannerImage">
+            <GridView
+                Name="MainGrid">
+                <GridView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Movie">
+                        <StackPanel 
+                            Name="BannerPanel"
+                            CornerRadius="5"
+                            Orientation="Horizontal"
+                            Margin="60,45,0,0"
+                            HorizontalAlignment="Right">
+                            <Image
+                                Name="MoviePosterImage"
+                                Stretch="UniformToFill"
+                                Source="{Binding ImageReference}"
+                                Width="150"
+                                Height="250"/>
 
-            CornerRadius="5"
-            Height="250"
-            Width="500"
-            Margin="60,45,0,0"
-            RelativePanel.RightOf="BannerPanel"
-            RelativePanel.AlignVerticalCenterWith="BannerPanel"
-            HorizontalAlignment="Right">
+                            <StackPanel 
 
-            <Border
-                Background="#424242">
-                <TextBlock
-                    Name="MovieTitle"
-                    FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
-                    Foreground="#fafafa"
-                    Padding="20,10,0,10"
-                    Text="MOVIE TITLE"
-                    FontSize="30"
-                    TextAlignment="Center"
-                />
-            </Border>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock
-                    Name="PgRating"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
-                    Margin="5,5,5,5"
-                    Text="PG-13"/>
-                <TextBlock
-                    FontSize="12"
-                    Margin="5,2,5,5"
-                    Text="|"/>
-                <TextBlock
-                    Name="Duration"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
-                    Margin="5,5,5,5"
-                    Text="2h 14min"/>
-                <TextBlock
-                    FontSize="12"
-                    Margin="5,2,5,5"
-                    Text="|"/>
-                <TextBlock
-                    Name="Genre"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
-                    Margin="5,5,5,5"
-                    Text="Action, Adventure, Sci-fi"/>
-                <TextBlock
-                    FontSize="12"
-                    Margin="5,2,5,5"
-                    Text="|"/>
-                <TextBlock
-                    Name="ReleaseDate"
-                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                    FontSize="11"
-                    Margin="5,5,5,5"
-                    Text="16 February 2018 (USA)"/>
-            </StackPanel>
-            <TextBlock
-                FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                Margin="10,10,10,10"
-                TextWrapping="Wrap"
-                Text="&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&quot;"
-                ></TextBlock>
+                                CornerRadius="5"
+                                Height="250"
+                                Width="500"
+                                Margin="60,45,0,0"
+                                RelativePanel.RightOf="BannerPanel"
+                                RelativePanel.AlignVerticalCenterWith="BannerPanel"
+                                HorizontalAlignment="Right">
 
-        </StackPanel>
+                                <Border
+                                    Background="#424242">
+                                    <TextBlock
+                                        Name="MovieTitle"
+                                        FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
+                                        Foreground="#fafafa"
+                                        Padding="20,10,0,10"
+                                        Text="{Binding MovieName}"
+                                        FontSize="30"
+                                        TextAlignment="Center"
+                                    />
+                                </Border>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock
+                                        Name="PgRating"
+                                        FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
+                                        FontSize="11"
+                                        Margin="5,5,5,5"
+                                        Text="{Binding Pg}"/>
+                                    <TextBlock
+                                        FontSize="12"
+                                        Margin="5,2,5,5"
+                                        Text="|"/>
+                                    <TextBlock
+                                        Name="Genre"
+                                        FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
+                                        FontSize="11"
+                                        Margin="5,5,5,5"
+                                        Text="{Binding Genre}"/>
+                                    <TextBlock
+                                        FontSize="12"
+                                        Margin="5,2,5,5"
+                                        Text="|"/>
+                                    <TextBlock
+                                        Name="ReleaseDate"
+                                        FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
+                                        FontSize="11"
+                                        Margin="5,5,5,5"
+                                        Text="{Binding ReleaseDate}"/>
+                                </StackPanel>
+                                <TextBlock
+                                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
+                                    Margin="10,10,10,10"
+                                    TextWrapping="Wrap"
+                                    Text="{Binding Description}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </Grid>
     </RelativePanel>
 </Page>

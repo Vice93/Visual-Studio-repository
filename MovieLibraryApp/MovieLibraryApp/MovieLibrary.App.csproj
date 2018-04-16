@@ -124,12 +124,13 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ConvertDateTime.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
     <Compile Include="ViewModels\AdvancedSearchViewModel.cs" />
     <Compile Include="ViewModels\FavoritesViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
-    <Compile Include="ViewModels\MovieDetailsPage.cs" />
+    <Compile Include="ViewModels\MovieDetailsViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Views\AdvancedSearch.xaml.cs">
       <DependentUpon>AdvancedSearch.xaml</DependentUpon>
@@ -168,6 +169,7 @@
     <Content Include="Assets\banner.jpg" />
     <Content Include="Assets\Fonts\Lato\OFL.txt" />
     <Content Include="Assets\Fonts\Montserrat\OFL.txt" />
+    <Content Include="Assets\noImageAvailable.png" />
     <Content Include="Assets\poster.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -243,6 +245,12 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>9.0.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MovieLibrary.Models\MovieLibrary.Models.csproj">
+      <Project>{b4f258f6-f666-464f-a31d-0df4e1cd6084}</Project>
+      <Name>MovieLibrary.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

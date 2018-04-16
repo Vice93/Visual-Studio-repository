@@ -6,7 +6,7 @@
       xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:controls="using:Template10.Controls"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="using:MovieLibraryApp.Views"
+      xmlns:model="using:MovieLibrary.Models.Model"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MovieLibraryApp.ViewModels" mc:Ignorable="d">
 
@@ -32,23 +32,27 @@
             Margin="0,0,60,30"
             RelativePanel.AlignRightWithPanel="True"
             Foreground="#f5f5f5"
-            Text="BANNER MOVIE TITLE"
+            Text="Warcraft"
             />
 
         <TextBox 
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
             Name="SearchInput"
             RelativePanel.Below="BannerImage"
-            Margin="25,10,0,0"
+            Margin="25,10,10,0"
             Height="40"
             Width="300"
             Padding="20,15,0,0"
             BorderThickness="0"
+            KeyUp="SearchInput_OnKeyUp"
             Foreground="DarkGray"
             PlaceholderText="Search movies" />
         <SymbolIcon
+            Name="SearchIcon"
+            RelativePanel.AlignRightWith="SearchInput"
             RelativePanel.AlignVerticalCenterWith="SearchInput"
-            Margin="20,15,0,0"
+            Margin="0,15,0,0"
+            Tapped="SearchIcon_OnTapped"
             Symbol="Find">
         </SymbolIcon>
 
@@ -66,21 +70,23 @@
             <GridView Grid.Row="1" 
                 Name="MainGrid"
                 IsItemClickEnabled="True"
-                ItemsSource="/Assets/banner.jpg"
                 >
 
                 <GridView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:Movie">
                         <StackPanel Orientation="Vertical"
-                            Background="#EBEBEB"  
+                            Name="MovieBox"
+                            Background="#EBEBEB"
+                            Tapped="MovieBox_OnTapped"
                             Margin="20,20,20,10"
                             HorizontalAlignment="Center"
+                            Tag="{Binding MovieId}"
                             CornerRadius="5">
 
                             <StackPanel 
                                 Background="#424242">
                                 <Image
-                                    Source="/Assets/poster.jpg"
+                                    Source="{Binding ImageReference}"
                                     Width="170"
                                     Height="100"
                                     Stretch="UniformToFill">
@@ -94,8 +100,7 @@
                                     Width="150" 
                                     Height="20" 
                                     TextWrapping="Wrap"
-                                    Text="MOVIE TITLE">
-                                </TextBlock>
+                                    Text="{Binding MovieName}" />
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
