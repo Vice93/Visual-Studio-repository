@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MovieLibraryApp.Services
+namespace MovieLibrary.ApiSearch
 {
-    public class Auth2Token
+    public class OAuth2
     {
-        private const string OAuth2 = "310a11e6-a408-4367-869f-6307e49ded06";
+        private const string OAuth2Token = "310a11e6-a408-4367-869f-6307e49ded06";
 
-        public string Token => OAuth2;
+        public string Token => OAuth2Token;
 
         public void GenerateAuth2Token()
         {

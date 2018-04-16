@@ -1,47 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Navigation;
-using MovieLibrary.ApiSearch;
 using MovieLibrary.Models.Model;
-using MovieLibraryApp.Services;
 using Newtonsoft.Json.Linq;
-using Template10.Mvvm;
 
-namespace MovieLibraryApp.ViewModels
+namespace MovieLibrary.ApiSearch
 {
-    public class MovieDetailsViewModel : ViewModelBase
+    public class ExploreSearch
     {
-        private const string AuthToken = "310a11e6-a408-4367-869f-6307e49ded06";
+        private readonly OAuth2 _oAuth2 = new OAuth2();
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
-        public async Task<ObservableCollection<Movie>> GetMoviesAsync(string id)
+        public ObservableCollection<Movie> SearchForMovie(string genre, string year, string type)
         {
-            await Task.Run(() => LookUpMovie(id));
-            return _movieList;
-        }
-
-        public void LookUpMovie(string id)
-        {
-            var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
+            var baseUri = new Uri("https://api.mediahound.com/1.3/graph/explore?params=");
 
             _movieList.Clear();
             using (var client = new HttpClient())
             {
                 var res = "";
+                var removeSpace = type.Replace(" ", string.Empty);
 
-                var param = "{\r\n  \"ids\": [\r\n    " + "\"" +  id + "\"" + "\r\n ],\r\n  \"components\": [\r\n    \"primaryImage\",\r\n    \"keyTraits\"\r\n  ]}";
-                
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthToken);
-                Debug.WriteLine(baseUri + param);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _oAuth2.Token);
+
+                var param = "{\r\n \"filters\": \r\n{\"returnType\": \r\n{\"$eq\": \"" + removeSpace + "\"\r\n},\"traits\": \r\n{\"$eq\": \"mhgnr-" + genre.ToLower() + "\"\r\n},\"year\": \r\n{\"$gte\":" + year + "\r\n}\r\n}}";
+
                 Task task = Task.Run(async () => { res = await client.GetStringAsync(baseUri + param); });
-
+                Debug.WriteLine(baseUri + param);
                 task.Wait();
 
                 JObject jobject = JObject.Parse(res);
@@ -53,23 +44,21 @@ namespace MovieLibraryApp.ViewModels
                     try
                     {
                         var movie = movies[i];
-
+                            
                         var desc = (string)movie["object"]["description"] ?? "No description available";
                         var imgRef = (string)movie["object"]["primaryImage"]["object"]["small"]["url"] ?? "/Assets/noImageAvailable.png";
-                        var genre = (string) movie["object"]["keyTraits"]["content"]["object"]["name"] ?? "No genre available";
-                        var releaseDate = movie["object"]["releaseDate"] ?? 0;
 
+                        //Even though we search for movies/shows with the type/genre/releasedate etc. that info is not always available on the API. But we already know this info anyway because we searched specifically for it.
                         var mov = new Movie
                         {
                             MovieId = (string)movie["object"]["mhid"],
                             MovieName = (string)movie["object"]["name"],
                             Description = desc,
-                            ReleaseDate = ConvertDateTime.ConvertFromUnixTimestamp((double)releaseDate),
-                            Genre = genre,
+                            ReleaseDate = ConvertDateTime.ConvertFromUnixTimestamp(Double.Parse(year)),
+                            Genre = genre, 
                             ImageReference = imgRef
                         };
                         _movieList.Add(mov);
-                        
                     }
                     catch (Exception e)
                     {
@@ -77,6 +66,7 @@ namespace MovieLibraryApp.ViewModels
                         break;
                     }
                 }
+                return _movieList;
             }
         }
     }

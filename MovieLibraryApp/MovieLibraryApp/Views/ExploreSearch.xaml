@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="MovieLibraryApp.Views.AdvancedSearch"
+    x:Class="MovieLibraryApp.Views.ExploreSearch"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MovieLibraryApp.Views"
@@ -31,37 +31,18 @@
 
         <TextBlock
             RelativePanel.Below="BannerImage"
-            Name="AdvancedSearchText"
+            Name="ExploreSearchText"
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
             Margin="25,20,0,0"
             FontSize="25"
-            Text="Advanced Search"
+            Text="Explore for movies"
         />
-        <TextBox 
-            FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-            Name="SearchInput"
-            RelativePanel.Below="BannerImage"
-            Margin="25,10,10,0"
-            Height="40"
-            Width="300"
-            Padding="20,15,0,0"
-            BorderThickness="0"
-            KeyUp="SearchInput_OnKeyUp"
-            Foreground="DarkGray"
-            PlaceholderText="Search movies" />
-        <SymbolIcon
-            Name="SearchIcon"
-            RelativePanel.AlignRightWith="SearchInput"
-            RelativePanel.AlignVerticalCenterWith="SearchInput"
-            Margin="0,15,0,0"
-            Tapped="SearchIcon_OnTapped"
-            Symbol="Find">
-        </SymbolIcon>
+
 
         <TextBlock
             Name="GenreText"
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-            RelativePanel.Below="SearchInput"
+            RelativePanel.Below="ExploreSearchText"
             Margin="25,15,0,0"
             Text="Genre"
             FontSize="20"/>
@@ -73,7 +54,13 @@
             Margin="25,10,0,0">
             <ComboBoxItem>Drama</ComboBoxItem>
             <ComboBoxItem>Comedy</ComboBoxItem>
-            <ComboBoxItem></ComboBoxItem>
+            <ComboBoxItem>Crime</ComboBoxItem>
+            <ComboBoxItem>Fantasy</ComboBoxItem>
+            <ComboBoxItem>Horror</ComboBoxItem>
+            <ComboBoxItem>Documentary</ComboBoxItem>
+            <ComboBoxItem>Romance</ComboBoxItem>
+            <ComboBoxItem>Science-Fiction</ComboBoxItem>
+            <ComboBoxItem>Western</ComboBoxItem>
         </ComboBox>
 
         <TextBlock
@@ -93,7 +80,7 @@
         </ComboBox>
 
         <StackPanel
-            Name="TypeRadioGroup"
+            Name="SearchType"
             RelativePanel.Below="YearCombo"
             Margin="25,20,0,0">
             <TextBlock 
@@ -101,14 +88,24 @@
                 FontSize="20"
                 Text="Search Type"/>
             <StackPanel Orientation="Horizontal"
+                        Name="TypeRadioGroup"
                         Margin="0,10,0,0">
-                <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Actor" GroupName="searchType" />
+                <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Show Series" GroupName="searchType" IsChecked="True"/>
                 <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Movie" GroupName="searchType" />
             </StackPanel>
         </StackPanel>
 
+        <Button
+            Name="SearchButton"
+            RelativePanel.Below="SearchType"
+            Margin="20,20,0,0"
+            Width="Auto"
+            Height="Auto"
+            Content="Explore for movies"
+            Click="SearchButton_OnClick"/>
+
         <Grid
-            RelativePanel.RightOf="SearchInput"
+            RelativePanel.RightOf="ExploreSearchText"
             RelativePanel.AlignRightWithPanel="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

@@ -43,12 +43,10 @@ namespace MovieLibraryApp.Views
         {
             base.OnNavigatedTo(e);
 
-            if(e.Parameter != null)
-            {
-                var id = _serializationService.Deserialize(e.Parameter?.ToString()).ToString();
-                var res = await _mdvm.GetMoviesAsync(id);
-                MainGrid.ItemsSource = res;
-            }
+            if (e.Parameter == null) return;
+            var id = _serializationService.Deserialize(e.Parameter?.ToString()).ToString();
+            var res = await _mdvm.GetMoviesAsync(id);
+            MainGrid.ItemsSource = res;
         }
     }
 }
