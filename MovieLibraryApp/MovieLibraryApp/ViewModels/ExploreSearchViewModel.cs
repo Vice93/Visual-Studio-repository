@@ -13,16 +13,16 @@ namespace MovieLibraryApp.ViewModels
 {
     public class ExploreSearchViewModel : ViewModelBase
     {
-        private readonly ExploreSearch _search = new ExploreSearch();
+        private readonly ExploreSearch _explore = new ExploreSearch();
 
         public Movie MovieObject { get; set; }
 
         public void GoToMovieDetailsPage() =>
             NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
 
-        public ObservableCollection<Movie> NormalSearch(string genre, string year, string type)
+        public async Task<ObservableCollection<Movie>>Explore(string genre, string year, string type)
         {
-            return _search.SearchForMovie(genre, year, type);
+            return await _explore.ExploreMovies(genre, year, type);
         }
     }
 }

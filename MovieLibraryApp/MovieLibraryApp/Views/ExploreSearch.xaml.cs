@@ -32,25 +32,15 @@ namespace MovieLibraryApp.Views
             _esv = new ExploreSearchViewModel();
         }
 
-        private void SearchIcon_OnTapped(object sender, TappedRoutedEventArgs e)
-        {
-            Search();
-        }
-
-        private void SearchInput_OnKeyUp(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == VirtualKey.Enter)
-            {
-                Search();
-            }
-        }
-
-        private void Search()
+        private async void Search()
         {
             if (GenreCombo.SelectionBoxItem == null || YearCombo.SelectionBoxItem == null) return;
             var checkedButton = TypeRadioGroup.Children.OfType<RadioButton>()
                 .FirstOrDefault(r => (bool)r.IsChecked);
-            MainGrid.ItemsSource = _esv.NormalSearch((string)GenreCombo.SelectionBoxItem, (string)YearCombo.SelectionBoxItem, (string)checkedButton.Content);
+            var res = await _esv.Explore((string) GenreCombo.SelectionBoxItem, (string) YearCombo.SelectionBoxItem,
+                (string) checkedButton.Content);
+
+            MainGrid.ItemsSource = res;
         }
 
         private void SearchButton_OnClick(object sender, RoutedEventArgs e)

@@ -17,25 +17,32 @@ namespace MovieLibrary.ApiSearch
         private readonly OAuth2 _oAuth2 = new OAuth2();
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
-        public ObservableCollection<Movie> SearchForMovie(string genre, string year, string type)
+        public async Task<ObservableCollection<Movie>> ExploreMovies(string genre, string year, string type)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/explore?params=");
+
+
 
             _movieList.Clear();
             using (var client = new HttpClient())
             {
-                var res = "";
-                var removeSpace = type.Replace(" ", string.Empty);
+                var removeSpaceFromType = type.Replace(" ", string.Empty);
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _oAuth2.Token);
 
-                var param = "{\r\n \"filters\": \r\n{\"returnType\": \r\n{\"$eq\": \"" + removeSpace + "\"\r\n},\"traits\": \r\n{\"$eq\": \"mhgnr-" + genre.ToLower() + "\"\r\n},\"year\": \r\n{\"$gte\":" + year + "\r\n}\r\n}}";
+                var param = "{\r\n \"filters\": \r\n{\"returnType\": \r\n{\"$eq\": \"" + removeSpaceFromType + "\"\r\n},\"traits\": \r\n{\"$eq\": \"mhgnr-" + genre.ToLower() + "\"\r\n},\"year\": \r\n{\"$gte\":" + year + "\r\n}\r\n}}";
 
-                Task task = Task.Run(async () => { res = await client.GetStringAsync(baseUri + param); });
                 Debug.WriteLine(baseUri + param);
-                task.Wait();
+                var res = await client.GetAsync(baseUri + param);
+                
 
-                JObject jobject = JObject.Parse(res);
+                if (!res.IsSuccessStatusCode)
+                {
+                    throw new Exception("HttpClient Error: " + res.StatusCode);
+                }
+                var content = await res.Content.ReadAsStringAsync();
+
+                JObject jobject = JObject.Parse(content);
 
                 JToken movies = jobject["content"];
 

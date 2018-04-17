@@ -7,7 +7,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Cryptography.Certificates;
 using Windows.UI.Xaml.Navigation;
+using Windows.Web.Http.Filters;
 using MovieLibrary.ApiSearch;
 using MovieLibrary.Models.Model;
 using MovieLibraryApp.Services;
@@ -21,30 +23,30 @@ namespace MovieLibraryApp.ViewModels
         private const string AuthToken = "310a11e6-a408-4367-869f-6307e49ded06";
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
+
+
         public async Task<ObservableCollection<Movie>> GetMoviesAsync(string id)
         {
-            await Task.Run(() => LookUpMovie(id));
-            return _movieList;
-        }
-
-        public void LookUpMovie(string id)
-        {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
+            
 
             _movieList.Clear();
+
             using (var client = new HttpClient())
             {
-                var res = "";
 
                 var param = "{\r\n  \"ids\": [\r\n    " + "\"" +  id + "\"" + "\r\n ],\r\n  \"components\": [\r\n    \"primaryImage\",\r\n    \"keyTraits\"\r\n  ]}";
                 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthToken);
                 Debug.WriteLine(baseUri + param);
-                Task task = Task.Run(async () => { res = await client.GetStringAsync(baseUri + param); });
 
-                task.Wait();
-
-                JObject jobject = JObject.Parse(res);
+                var res = await client.GetAsync(baseUri + param);
+                if(!res.IsSuccessStatusCode)
+                {
+                    throw new Exception("HttpClient Error: " + res.StatusCode);
+                }
+                var content = await res.Content.ReadAsStringAsync();
+                JObject jobject = JObject.Parse(content);
 
                 JToken movies = jobject["content"];
 
@@ -77,6 +79,7 @@ namespace MovieLibraryApp.ViewModels
                         break;
                     }
                 }
+                return _movieList;
             }
         }
     }
