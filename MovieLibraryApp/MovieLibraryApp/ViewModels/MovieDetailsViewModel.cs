@@ -29,16 +29,19 @@ namespace MovieLibraryApp.ViewModels
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
             
-
             _movieList.Clear();
 
             using (var client = new HttpClient())
             {
 
-                var param = "{\r\n  \"ids\": [\r\n    " + "\"" +  id + "\"" + "\r\n ],\r\n  \"components\": [\r\n    \"primaryImage\",\r\n    \"keyTraits\"\r\n  ]}";
+                var param = @"{""ids"": [""mhmov-gladiator""],""components"": [""primaryImage"",""keyTraits""]}";
+
+                var test = "{%22ids%22:[%22mhsss7qo1dwcAQid4ETZ2oJqq4yzrzG3uL1b0VklxMhU%22],%22components%22:%20[%22primaryImage%22,%22keyTraits%22]}";
                 
+                client.DefaultRequestHeaders.Add("Postman-Token", "af427dd0-b266-4652-a569-6ed7cb6977d6");
+                client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthToken);
-                Debug.WriteLine(baseUri + param);
+                Debug.WriteLine(baseUri + test);
 
                 var res = await client.GetAsync(baseUri + param);
                 if(!res.IsSuccessStatusCode)
