@@ -3,6 +3,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.System;
 using Windows.UI.Xaml.Input;
 using Template10.Services.NavigationService;
+using System.Collections.ObjectModel;
+using MovieLibrary.Models.Model;
 
 namespace MovieLibraryApp.Views
 {
@@ -34,6 +36,13 @@ namespace MovieLibraryApp.Views
             if (SearchInput.Text != "")
             {
                 MainGrid.ItemsSource = _mvm.NormalSearch(SearchInput.Text);
+                if (MainGrid.Items.Count == 0)
+                {
+                    EmptyList.Text = "Couldn't find any movies. Try a different search.";
+                } else
+                {
+                    EmptyList.Text = "";
+                }
             }
         }
     }

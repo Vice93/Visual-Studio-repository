@@ -31,7 +31,7 @@ namespace MovieLibrary.ApiSearch
                 Task task = Task.Run(async () => { res = await client.GetStringAsync(baseUri + searchInput + "?type=movie"); });
 
                 task.Wait();
-
+                
                 JObject jobject = JObject.Parse(res);
 
                 JToken movies = jobject["content"];

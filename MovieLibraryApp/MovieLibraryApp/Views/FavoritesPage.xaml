@@ -33,15 +33,14 @@
             FontSize="25"
             Text="Favorites"/>
         <Grid
+            RelativePanel.Below="FavoritesText"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Height="210">
-            </Grid>
-            <GridView Grid.Row="1" 
+            <GridView Grid.Row="0" 
                 Name="MainGrid"
                 IsItemClickEnabled="True"
                 ItemsSource="/Assets/banner.jpg">

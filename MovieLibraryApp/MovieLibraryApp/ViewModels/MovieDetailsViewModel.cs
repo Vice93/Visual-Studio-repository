@@ -23,8 +23,6 @@ namespace MovieLibraryApp.ViewModels
         private const string AuthToken = "310a11e6-a408-4367-869f-6307e49ded06";
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
-
-
         public async Task<ObservableCollection<Movie>> GetMoviesAsync(string id)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
@@ -34,21 +32,31 @@ namespace MovieLibraryApp.ViewModels
             using (var client = new HttpClient())
             {
 
-                var param = @"{""ids"": [""mhmov-gladiator""],""components"": [""primaryImage"",""keyTraits""]}";
-
-                var test = "{%22ids%22:[%22mhsss7qo1dwcAQid4ETZ2oJqq4yzrzG3uL1b0VklxMhU%22],%22components%22:%20[%22primaryImage%22,%22keyTraits%22]}";
-                
-                client.DefaultRequestHeaders.Add("Postman-Token", "af427dd0-b266-4652-a569-6ed7cb6977d6");
-                client.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+                var param = "{\"ids\":[\"" + id +  "\"],\"components\":[\"primaryImage\",\"keyTraits\"]}";
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthToken);
-                Debug.WriteLine(baseUri + test);
+                Debug.WriteLine(baseUri + param);
 
+                
+                client.DefaultRequestHeaders
+                      .Accept
+                      .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + param);
+                request.Content = new StringContent("",
+                                    Encoding.UTF8,
+                                    "application/json");//CONTENT-TYPE header
+                
+                var result = await client.SendAsync(request);
+
+                /*
                 var res = await client.GetAsync(baseUri + param);
                 if(!res.IsSuccessStatusCode)
                 {
                     throw new Exception("HttpClient Error: " + res.StatusCode);
                 }
-                var content = await res.Content.ReadAsStringAsync();
+                */
+                var content = await result.Content.ReadAsStringAsync();
+                
                 JObject jobject = JObject.Parse(content);
 
                 JToken movies = jobject["content"];

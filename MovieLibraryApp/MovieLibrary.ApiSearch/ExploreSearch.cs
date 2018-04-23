@@ -30,6 +30,7 @@ namespace MovieLibrary.ApiSearch
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _oAuth2.Token);
 
+
                 var param = "{\r\n \"filters\": \r\n{\"returnType\": \r\n{\"$eq\": \"" + removeSpaceFromType + "\"\r\n},\"traits\": \r\n{\"$eq\": \"mhgnr-" + genre.ToLower() + "\"\r\n},\"year\": \r\n{\"$gte\":" + year + "\r\n}\r\n}}";
 
                 Debug.WriteLine(baseUri + param);
@@ -41,7 +42,7 @@ namespace MovieLibrary.ApiSearch
                     throw new Exception("HttpClient Error: " + res.StatusCode);
                 }
                 var content = await res.Content.ReadAsStringAsync();
-
+                
                 JObject jobject = JObject.Parse(content);
 
                 JToken movies = jobject["content"];

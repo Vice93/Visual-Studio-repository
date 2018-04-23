@@ -47,16 +47,23 @@
             KeyUp="SearchInput_OnKeyUp"
             Foreground="DarkGray"
             PlaceholderText="Search movies" />
+        
         <SymbolIcon
             Name="SearchIcon"
             RelativePanel.AlignRightWith="SearchInput"
             RelativePanel.AlignVerticalCenterWith="SearchInput"
             Margin="0,15,0,0"
             Tapped="SearchIcon_OnTapped"
-            Symbol="Find">
-        </SymbolIcon>
+            Symbol="Find"/>
+
+        <TextBlock 
+            Name="EmptyList"
+            RelativePanel.Below="SearchInput"
+            Margin="45,10,0,0"
+            Foreground="Red"/>
 
         <Grid
+            RelativePanel.Below="SearchInput"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             >
@@ -64,10 +71,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Height="210">
-            </Grid>
 
-            <GridView Grid.Row="1" 
+            <GridView Grid.Row="0" 
                 Name="MainGrid"
                 IsItemClickEnabled="True"
                 Tapped="{x:Bind ViewModel.GoToMovieDetailsPage}"
