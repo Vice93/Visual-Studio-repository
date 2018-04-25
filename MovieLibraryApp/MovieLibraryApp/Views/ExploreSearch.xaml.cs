@@ -1,19 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using MovieLibraryApp.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -30,22 +18,46 @@ namespace MovieLibraryApp.Views
         {
             this.InitializeComponent();
             _esv = new ExploreSearchViewModel();
+            PopulateYearCombo();
         }
 
         private async void Search()
         {
             if (GenreCombo.SelectionBoxItem == null || YearCombo.SelectionBoxItem == null) return;
-            var checkedButton = TypeRadioGroup.Children.OfType<RadioButton>()
-                .FirstOrDefault(r => (bool)r.IsChecked);
-            var res = await _esv.Explore((string) GenreCombo.SelectionBoxItem, (string) YearCombo.SelectionBoxItem,
-                (string) checkedButton.Content);
 
-            MainGrid.ItemsSource = res;
+            try
+            {
+                LoadingIndicator.IsActive = true;
+
+                var checkedButton = TypeRadioGroup.Children.OfType<RadioButton>()
+                .FirstOrDefault(r => (bool)r.IsChecked);
+                var res = await _esv.Explore((string)GenreCombo.SelectionBoxItem, YearCombo.SelectionBoxItem.ToString(),
+                    (string)checkedButton.Content);
+
+                MainGrid.ItemsSource = res;
+            }
+            finally
+            {
+                LoadingIndicator.IsActive = false;
+            }
         }
 
         private void SearchButton_OnClick(object sender, RoutedEventArgs e)
         {
             Search();
+        }
+
+        private void PopulateYearCombo()
+        {
+            for(var i=0; i<50; i++)
+            {
+                var year = DateTime.Now.Year - i;
+                var item = new ComboBoxItem
+                {
+                    Content = year
+                };
+                YearCombo.Items.Add(item);
+            }
         }
     }
 }

@@ -2,11 +2,16 @@
     x:Class="MovieLibraryApp.Views.MovieDetailsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MovieLibraryApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:model="using:MovieLibrary.Models.Model"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="using:Template10.Converters"
+    MinWidth="800"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <converters:StringFormatConverter x:Key="StringFormatConverter" />
+    </Page.Resources>
 
     <RelativePanel>
         
@@ -15,7 +20,7 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             Stretch="UniformToFill" 
-            Height="150" 
+            Height="200" 
             Source="/Assets/banner.jpg" 
         />
         <TextBlock 
@@ -32,28 +37,29 @@
             RelativePanel.Below="BannerImage"
             RelativePanel.AlignHorizontalCenterWith="BannerImage">
             <GridView
+                Margin="0,50,0,0"
+                SelectionMode="None"
                 Name="MainGrid">
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="model:Movie">
                         <StackPanel 
-                            Name="BannerPanel"
+                            Name="InfoPanel"
                             CornerRadius="5"
                             Orientation="Horizontal"
-                            Margin="60,45,0,0"
                             HorizontalAlignment="Right">
                             <Image
+                                
                                 Name="MoviePosterImage"
                                 Stretch="UniformToFill"
                                 Source="{Binding ImageReference}"
-                                Width="150"
+                                Width="170"
                                 Height="250"/>
-
                             <StackPanel 
                                 CornerRadius="5"
-                                Height="250"
+                                Height="290"
                                 Width="500"
                                 Margin="60,45,0,0"
-                                RelativePanel.RightOf="BannerPanel"
+                                RelativePanel.RightOf="InfoPanel"
                                 RelativePanel.AlignVerticalCenterWith="BannerPanel"
                                 HorizontalAlignment="Right">
 
@@ -63,19 +69,23 @@
                                         Name="MovieTitle"
                                         FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
                                         Foreground="#fafafa"
-                                        Padding="20,10,0,10"
+                                        Padding="20,7,0,10"
                                         Text="{Binding MovieName}"
                                         FontSize="30"
                                         TextAlignment="Center"
                                     />
                                 </Border>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <StackPanel 
+                                    Name="Details"
+                                    Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock
                                         Name="PgRating"
                                         FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
                                         FontSize="11"
-                                        Margin="5,5,5,5"
-                                        Text="{Binding Pg}"/>
+                                        Margin="5,5,5,5">
+                                        <Run Text="PG: "/>
+                                        <Run Text="{Binding Pg}" />
+                                    </TextBlock>
                                     <TextBlock
                                         FontSize="12"
                                         Margin="5,2,5,5"
@@ -84,8 +94,10 @@
                                         Name="Genre"
                                         FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
                                         FontSize="11"
-                                        Margin="5,5,5,5"
-                                        Text="{Binding Genre}"/>
+                                        Margin="5,5,5,5">
+                                        <Run Text="Genre: " />
+                                        <Run Text="{Binding Genre}" />
+                                    </TextBlock>
                                     <TextBlock
                                         FontSize="12"
                                         Margin="5,2,5,5"
@@ -94,10 +106,13 @@
                                         Name="ReleaseDate"
                                         FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
                                         FontSize="11"
-                                        Margin="5,5,5,5"
-                                        Text="{Binding ReleaseDate}"/>
+                                        Margin="5,5,5,5">
+                                        <Run Text="Release Date: "/>
+                                        <Run Text="{Binding ReleaseDate, Converter={StaticResource StringFormatConverter},ConverterParameter='{}{0:yyy}'}"/>
+                                    </TextBlock>
                                 </StackPanel>
                                 <TextBlock
+                                    Name="Desc"
                                     FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
                                     Margin="10,10,10,10"
                                     TextWrapping="Wrap"
@@ -108,5 +123,26 @@
                 </GridView.ItemTemplate>
             </GridView>
         </Grid>
+        <Button
+            RelativePanel.Below="BannerImage"
+            RelativePanel.AlignHorizontalCenterWith="BannerImage"
+            Foreground="#fafafa"
+            Background="#424242"
+            Name="AddToFavorites"
+            Visibility="Collapsed"
+            FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
+            Content="Add to favorites"
+            Width="170"
+            Margin="-367,343,0,0"/>
+        <ProgressRing 
+            x:Name="LoadingIndicator"
+            Foreground="#616161"
+            Width="100"
+            Height="100"
+            Visibility="Visible"
+            RelativePanel.Below="BannerImage"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            Margin="0,150,0,0"/>
     </RelativePanel>
 </Page>

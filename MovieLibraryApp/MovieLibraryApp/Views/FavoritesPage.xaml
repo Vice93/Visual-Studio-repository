@@ -13,7 +13,7 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             Stretch="UniformToFill" 
-            Height="150" 
+            Height="200" 
             Source="/Assets/banner.jpg"/>
         <TextBlock 
             FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
@@ -37,11 +37,11 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <GridView Grid.Row="0" 
                 Name="MainGrid"
+                ScrollViewer.VerticalScrollMode="Enabled"
                 IsItemClickEnabled="True"
                 ItemsSource="/Assets/banner.jpg">
                 <GridView.ItemTemplate>

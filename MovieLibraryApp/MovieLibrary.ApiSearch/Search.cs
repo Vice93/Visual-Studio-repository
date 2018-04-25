@@ -17,47 +17,74 @@ namespace MovieLibrary.ApiSearch
         private readonly OAuth2 _oAuth2 = new OAuth2();
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
-        public ObservableCollection<Movie> SearchForMovie(string searchInput)
+        public async Task<ObservableCollection<Movie>> SearchForMovie(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");
+
+            if(_oAuth2.Expires_in <= 5)
+            {
+                await _oAuth2.GenerateAuth2TokenAsync();
+            }
 
             _movieList.Clear();
             using (var client = new HttpClient())
             {
-                var res = "";
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_oAuth2.Token_type, _oAuth2.Token);
+                client.DefaultRequestHeaders
+                      .Accept
+                      .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _oAuth2.Token);
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + searchInput + "?types=movie&showseries");
 
-                Task task = Task.Run(async () => { res = await client.GetStringAsync(baseUri + searchInput + "?type=movie"); });
+                var result = await client.SendAsync(request);
+                var content = await result.Content.ReadAsStringAsync();
 
-                task.Wait();
-                
-                JObject jobject = JObject.Parse(res);
-
+                JObject jobject = JObject.Parse(content);
                 JToken movies = jobject["content"];
 
-                for (var i = 0; i < movies.Count(); i++)
-                {
-                    try
-                    {
-                        var movie = movies[i];
+                AddMovieToList(movies);
 
-                        var imgRef = (string)movie["object"]["primaryImage"]["object"]["small"]["url"] ?? "/Assets/noImageAvailable.png";
-                        var mov = new Movie
-                        {
-                            MovieId = (string)movie["object"]["mhid"],
-                            MovieName = (string)movie["object"]["name"],
-                            ImageReference = imgRef
-                        };
-                        _movieList.Add(mov);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.Message);
-                        break;
-                    }
+                //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request for 10 more, I don't see a way around it.
+                JToken next = jobject["pagingInfo"];
+                var nextPage = next["next"];
+                if (nextPage != null)
+                {
+                    request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
+
+                    result = await client.SendAsync(request);
+                    content = await result.Content.ReadAsStringAsync();
+
+                    jobject = JObject.Parse(content);
+                    movies = jobject["content"];
+
+                    AddMovieToList(movies);
                 }
                 return _movieList;
+            }
+        }
+
+        private void AddMovieToList(JToken movies)
+        {
+            for (var i = 0; i < movies.Count(); i++)
+            {
+                try
+                {
+                    var movie = movies[i];
+
+                    var imgRef = (string)movie["object"]["primaryImage"]["object"]["small"]["url"] ?? "/Assets/noImageAvailable.png";
+                    var mov = new Movie
+                    {
+                        MovieId = (string)movie["object"]["mhid"],
+                        MovieName = (string)movie["object"]["name"],
+                        ImageReference = imgRef
+                    };
+                    _movieList.Add(mov);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    break;
+                }
             }
         }
     }

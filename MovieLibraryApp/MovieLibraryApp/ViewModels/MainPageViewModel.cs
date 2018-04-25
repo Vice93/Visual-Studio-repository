@@ -1,13 +1,7 @@
 ﻿using Template10.Mvvm;
-using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MovieLibrary.Models.Model;
-using Newtonsoft.Json.Linq;
 using MovieLibrary.ApiSearch;
 
 namespace MovieLibraryApp.ViewModels
@@ -30,14 +24,17 @@ namespace MovieLibraryApp.ViewModels
         public void GotoAbout() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 2);
 
-        public void GoToMovieDetailsPage() =>
-            NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
-
-
-        public ObservableCollection<Movie> NormalSearch(string searchInput)
+        public void GoToMovieDetailsPage()
         {
-            return _search.SearchForMovie(searchInput);
+            if(MovieObject != null)
+            {
+                NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
+            }
         }
 
+        public async Task<ObservableCollection<Movie>> NormalSearch(string searchInput)
+        {
+            return await _search.SearchForMovie(searchInput);
+        }
     }
 }

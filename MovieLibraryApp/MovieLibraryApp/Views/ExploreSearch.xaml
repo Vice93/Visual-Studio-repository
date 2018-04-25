@@ -2,11 +2,15 @@
     x:Class="MovieLibraryApp.Views.ExploreSearch"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MovieLibraryApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:MovieLibrary.Models.Model"
+    xmlns:vm="using:MovieLibraryApp.ViewModels"
     mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:ExploreSearchViewModel x:Name="ViewModel" />
+    </Page.DataContext>
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -15,7 +19,7 @@
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             Stretch="UniformToFill" 
-            Height="150" 
+            Height="200"
             Source="/Assets/banner.jpg" 
         />
         <TextBlock 
@@ -61,6 +65,7 @@
             <ComboBoxItem>Romance</ComboBoxItem>
             <ComboBoxItem>Science-Fiction</ComboBoxItem>
             <ComboBoxItem>Western</ComboBoxItem>
+            <!-- These are all the genres I have found available in mediahound's API. Adding unexisting genres (like "Action" and "Adventure" strangely enough) returns a keyword not recognized error -->
         </ComboBox>
 
         <TextBlock
@@ -76,7 +81,6 @@
             RelativePanel.Below="YearText"
             PlaceholderText="Select a year"
             Margin="25,10,0,0">
-            <ComboBoxItem>2010</ComboBoxItem>
         </ComboBox>
 
         <StackPanel
@@ -90,7 +94,7 @@
             <StackPanel Orientation="Horizontal"
                         Name="TypeRadioGroup"
                         Margin="0,10,0,0">
-                <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Show Series" GroupName="searchType" IsChecked="True"/>
+                <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Show/Series" GroupName="searchType" IsChecked="True"/>
                 <RadioButton FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat" Content="Movie" GroupName="searchType" />
             </StackPanel>
         </StackPanel>
@@ -109,11 +113,13 @@
             RelativePanel.RightOf="ExploreSearchText"
             RelativePanel.AlignRightWithPanel="True">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <GridView Grid.Row="0" 
                 Name="MainGrid"
+                ScrollViewer.VerticalScrollMode="Enabled"
+                Tapped="{x:Bind ViewModel.GoToMovieDetailsPage}"
+                SelectedItem="{Binding MovieObject, Mode=TwoWay}"
                 IsItemClickEnabled="True">
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="model:Movie">
@@ -146,5 +152,15 @@
                 </GridView.ItemTemplate>
             </GridView>
         </Grid>
+        <ProgressRing 
+            x:Name="LoadingIndicator"
+            Foreground="#616161"
+            Width="100"
+            Height="100"
+            Visibility="Visible"
+            RelativePanel.Below="ExploreSearchText"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            Margin="0,50,0,0"/>
     </RelativePanel>
 </Page>
