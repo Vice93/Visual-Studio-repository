@@ -20,7 +20,7 @@ namespace MovieLibraryApp.ViewModels
 {
     public class MovieDetailsViewModel : ViewModelBase
     {
-        private const string AuthToken = "310a11e6-a408-4367-869f-6307e49ded06";
+        private const string AuthToken = "94cc63de-e153-4402-adf5-33df88517e28";
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
         public async Task<ObservableCollection<Movie>> GetMoviesAsync(string id)
@@ -32,7 +32,7 @@ namespace MovieLibraryApp.ViewModels
             using (var client = new HttpClient())
             {
 
-                var param = "{\"ids\":[\"" + id +  "\"],\"components\":[\"primaryImage\",\"keyTraits\"]}";
+                var param = Uri.EscapeUriString("{\"ids\":[\"" + id +  "\"],\"components\":[\"primaryImage\",\"keyTraits\"]}");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthToken);
                 Debug.WriteLine(baseUri + param);
 

@@ -8,7 +8,7 @@ namespace MovieLibrary.ApiSearch
 {
     public class OAuth2
     {
-        private const string OAuth2Token = "310a11e6-a408-4367-869f-6307e49ded06";
+        private const string OAuth2Token = "94cc63de-e153-4402-adf5-33df88517e28";
 
         public string Token => OAuth2Token;
 
