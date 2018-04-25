@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="using:MovieLibrary.Models.Model"
     xmlns:vm="using:MovieLibraryApp.ViewModels"
+    MinWidth="600"
     mc:Ignorable="d">
 
     <Page.DataContext>
@@ -39,10 +40,8 @@
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
             Margin="25,20,0,0"
             FontSize="25"
-            Text="Explore for movies"
-        />
-
-
+            Text="Explore for movies"/>
+        
         <TextBlock
             Name="GenreText"
             FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
@@ -152,6 +151,11 @@
                 </GridView.ItemTemplate>
             </GridView>
         </Grid>
+        <TextBlock 
+            Name="EmptyList"
+            RelativePanel.AlignBottomWith="GenreText"
+            RelativePanel.AlignHorizontalCenterWith="LoadingIndicator"
+            Foreground="Red"/>
         <ProgressRing 
             x:Name="LoadingIndicator"
             Foreground="#616161"

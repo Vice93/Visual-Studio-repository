@@ -38,6 +38,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection.cs" />
     <Compile Include="ExploreSearch.cs" />
     <Compile Include="ConvertDateTime.cs" />
     <Compile Include="LookupSearch.cs" />

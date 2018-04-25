@@ -17,12 +17,23 @@ namespace MovieLibraryApp.ViewModels
 
         public Movie MovieObject { get; set; }
 
-        public void GoToMovieDetailsPage() =>
-            NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
+        public void GoToMovieDetailsPage()
+        {
+            if(MovieObject != null)
+            {
+                NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
+            }
+        }
+            
 
         public async Task<ObservableCollection<Movie>>Explore(string genre, string year, string type)
         {
-            return await _explore.ExploreMovies(genre, year, type);
+            Connection _status = new Connection();
+            if (_status.isInternetConnected)
+            {
+                return await _explore.ExploreMovies(genre, year, type);
+            }
+            return new ObservableCollection<Movie>();
         }
     }
 }
