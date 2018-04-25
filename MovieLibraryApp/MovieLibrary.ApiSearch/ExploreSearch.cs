@@ -46,12 +46,15 @@ namespace MovieLibrary.ApiSearch
 
                 JToken movies = jobject["content"];
 
-                AddMoviesToList(movies,genre,year);
+                if(movies.Count() != 0)
+                {
+                    AddMoviesToList(movies, genre, year);
+                }
                 
                 //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request for 10 more, I don't see a way around it.
                 JToken next = jobject["pagingInfo"];
                 var nextPage = next["next"];
-                if (nextPage != null)
+                if (nextPage.Count() != 0)
                 {
                     request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
 
