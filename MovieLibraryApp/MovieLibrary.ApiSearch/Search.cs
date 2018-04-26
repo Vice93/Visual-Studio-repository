@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -19,11 +20,6 @@ namespace MovieLibrary.ApiSearch
         public async Task<ObservableCollection<Movie>> SearchForMovie(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");
-
-            if(OAuth2.ExpiresIn <= 5)
-            {
-                await OAuth2.GenerateAuth2TokenAsync();
-            }
 
             _movieList.Clear();
             using (var client = new HttpClient())
@@ -50,6 +46,14 @@ namespace MovieLibrary.ApiSearch
                 request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
 
                 result = await client.SendAsync(request);
+
+                if (result.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await OAuth2.GenerateAuth2TokenAsync();
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
+                    result = await client.SendAsync(request);
+                }
+
                 content = await result.Content.ReadAsStringAsync();
 
                 jobject = JObject.Parse(content);

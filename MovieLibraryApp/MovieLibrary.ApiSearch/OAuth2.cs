@@ -15,7 +15,6 @@ namespace MovieLibrary.ApiSearch
         public static string TokenType { get; set; }
         public static double ExpiresIn { get; set; }
         public static string Scope { get; set; }
-
         public static string Token { get; private set; }
 
         public static async Task GenerateAuth2TokenAsync()
@@ -47,7 +46,7 @@ namespace MovieLibrary.ApiSearch
                         ExpiresIn = (double)res["expires_in"];
                         Scope = (string)res["scope"];
 
-                        Debug.WriteLine("Retrieved OAuth2 token");
+                        Debug.WriteLine("Generated new OAuth2 token");
                     }
                 }
                 catch (Exception e)
