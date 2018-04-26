@@ -17,8 +17,8 @@ namespace MovieLibraryApp.ViewModels
         private readonly LookupSearch _ls = new LookupSearch();
         public async Task<ObservableCollection<Movie>> Lookup(string id)
         {
-            Connection _status = new Connection();
-            if (_status.isInternetConnected)
+            Connection status = new Connection();
+            if (status.isInternetConnected)
             {
                 return await _ls.GetMovieInfoAsync(id);
             }

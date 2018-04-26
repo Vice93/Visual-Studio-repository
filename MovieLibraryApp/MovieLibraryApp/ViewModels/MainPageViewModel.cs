@@ -26,16 +26,14 @@ namespace MovieLibraryApp.ViewModels
 
         public void GoToMovieDetailsPage()
         {
-            if(MovieObject != null)
-            {
-                NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
-            }
+            if (MovieObject == null) return;
+            NavigationService.Navigate(typeof(Views.MovieDetailsPage), MovieObject.MovieId);
         }
 
         public async Task<ObservableCollection<Movie>> NormalSearch(string searchInput)
         {
-            Connection _status = new Connection();
-            if (_status.isInternetConnected)
+            Connection status = new Connection();
+            if (status.isInternetConnected)
             {
                 return await _search.SearchForMovie(searchInput);
             }

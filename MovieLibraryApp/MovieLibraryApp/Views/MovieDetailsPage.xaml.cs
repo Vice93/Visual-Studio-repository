@@ -21,7 +21,6 @@ namespace MovieLibraryApp.Views
             NavigationCacheMode = NavigationCacheMode.Enabled;
             _mdvm = new MovieDetailsViewModel();
             _serializationService = SerializationService.Json;
-            
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)

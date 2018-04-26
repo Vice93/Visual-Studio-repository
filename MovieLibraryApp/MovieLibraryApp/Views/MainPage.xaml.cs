@@ -10,20 +10,21 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 using System;
+using System.Linq;
 
 namespace MovieLibraryApp.Views
 {
     public sealed partial class MainPage : Page
     {
-        private readonly OAuth2 oAuth2;
+        //private readonly OAuth2 oAuth2;
         private readonly MainPageViewModel _mvm;
         //private ApplicationDataCompositeValue composite;
         public MainPage()
         {
             InitializeComponent();
-            oAuth2 = new OAuth2();
+            //oAuth2 = new OAuth2();
             _mvm = new MainPageViewModel();
-            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         private void SearchIcon_OnTapped(object sender, TappedRoutedEventArgs e)
@@ -41,27 +42,16 @@ namespace MovieLibraryApp.Views
 
         private async void Search()
         {
-            if (SearchInput.Text != "")
+            if (SearchInput.Text == "") return;
+            try
             {
-                try
-                {
-                    LoadingIndicator.IsActive = true;
+                LoadingIndicator.IsActive = true;
 
-                    MainGrid.ItemsSource = await _mvm.NormalSearch(SearchInput.Text);
-                    if (MainGrid.Items.Count == 0)
-                    {
-                        EmptyList.Text = "Couldn't find any movies. Try a different search.";
-                    }
-                    else
-                    {
-                        EmptyList.Text = "";
-                    }
-
-                } finally
-                {
-                    LoadingIndicator.IsActive = false;
-                }
-                
+                MainGrid.ItemsSource = await _mvm.NormalSearch(SearchInput.Text);
+                EmptyList.Text = MainGrid.Items.Any() ? "" : "Couldn't find any movies. Try a different search.";
+            } finally
+            {
+                LoadingIndicator.IsActive = false;
             }
         }
 

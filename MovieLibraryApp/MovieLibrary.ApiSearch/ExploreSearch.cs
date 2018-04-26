@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MovieLibrary.Models.Model;
 using Newtonsoft.Json.Linq;
@@ -14,16 +12,15 @@ namespace MovieLibrary.ApiSearch
 {
     public class ExploreSearch
     {
-        private readonly OAuth2 _oAuth2 = new OAuth2();
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
         public async Task<ObservableCollection<Movie>> ExploreMovies(string genre, string year, string type)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/explore?params=");
 
-            if (_oAuth2.Expires_in <= 5)
+            if (OAuth2.ExpiresIn <= 5)
             {
-                await _oAuth2.GenerateAuth2TokenAsync();
+                await OAuth2.GenerateAuth2TokenAsync();
             }
 
             _movieList.Clear();
@@ -32,7 +29,7 @@ namespace MovieLibrary.ApiSearch
                 var removeDashFromType = type.Replace("/", string.Empty);
                 var param = Uri.EscapeUriString("{\"filters\": {\"returnType\": {\"$eq\": \"" + removeDashFromType + "\"},\"traits\": {\"$eq\": \"mhgnr-" + genre.ToLower() + "\"},\"year\": {\"$in\":[" + year + "]}}, \"components\":[\"primaryImage\"]}");
 
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_oAuth2.Token_type, _oAuth2.Token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                 client.DefaultRequestHeaders
                       .Accept
                       .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
@@ -46,7 +43,7 @@ namespace MovieLibrary.ApiSearch
 
                 JToken movies = jobject["content"];
 
-                if(movies.Count() != 0)
+                if(movies.Any())
                 {
                     AddMoviesToList(movies, genre, year);
                 }
@@ -54,18 +51,16 @@ namespace MovieLibrary.ApiSearch
                 //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request for 10 more, I don't see a way around it.
                 JToken next = jobject["pagingInfo"];
                 var nextPage = next["next"];
-                if (nextPage.Count() != 0)
-                {
-                    request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
+                if (!nextPage.Any()) return _movieList;
+                request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
 
-                    result = await client.SendAsync(request);
-                    content = await result.Content.ReadAsStringAsync();
+                result = await client.SendAsync(request);
+                content = await result.Content.ReadAsStringAsync();
 
-                    jobject = JObject.Parse(content);
-                    movies = jobject["content"];
+                jobject = JObject.Parse(content);
+                movies = jobject["content"];
 
-                    AddMoviesToList(movies,genre,year);
-                }
+                AddMoviesToList(movies,genre,year);
                 return _movieList;
             }
         }

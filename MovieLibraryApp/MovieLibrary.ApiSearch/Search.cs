@@ -14,27 +14,26 @@ namespace MovieLibrary.ApiSearch
 {
     public class Search
     {
-        private readonly OAuth2 _oAuth2 = new OAuth2();
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
         public async Task<ObservableCollection<Movie>> SearchForMovie(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");
 
-            if(_oAuth2.Expires_in <= 5)
+            if(OAuth2.ExpiresIn <= 5)
             {
-                await _oAuth2.GenerateAuth2TokenAsync();
+                await OAuth2.GenerateAuth2TokenAsync();
             }
 
             _movieList.Clear();
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_oAuth2.Token_type, _oAuth2.Token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                 client.DefaultRequestHeaders
                       .Accept
                       .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + searchInput + "?types=movie&showseries");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + searchInput + "?types=movie&types=showseries");
 
                 var result = await client.SendAsync(request);
                 var content = await result.Content.ReadAsStringAsync();
@@ -47,18 +46,16 @@ namespace MovieLibrary.ApiSearch
                 //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request for 10 more, I don't see a way around it.
                 JToken next = jobject["pagingInfo"];
                 var nextPage = next["next"];
-                if (nextPage.Count() != 0)
-                {
-                    request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
+                if (!nextPage.Any()) return _movieList;
+                request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
 
-                    result = await client.SendAsync(request);
-                    content = await result.Content.ReadAsStringAsync();
+                result = await client.SendAsync(request);
+                content = await result.Content.ReadAsStringAsync();
 
-                    jobject = JObject.Parse(content);
-                    movies = jobject["content"];
+                jobject = JObject.Parse(content);
+                movies = jobject["content"];
 
-                    AddMovieToList(movies);
-                }
+                AddMovieToList(movies);
                 return _movieList;
             }
         }

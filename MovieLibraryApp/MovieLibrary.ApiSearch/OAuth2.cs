@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,16 +10,15 @@ using System.Threading.Tasks;
 
 namespace MovieLibrary.ApiSearch
 {
-    public class OAuth2
+    public static class OAuth2
     {
-        private string OAuth2Token;
-        public string Token_type { get; set; }
-        public double Expires_in { get; set; }
-        public string Scope { get; set; }
+        public static string TokenType { get; set; }
+        public static double ExpiresIn { get; set; }
+        public static string Scope { get; set; }
 
-        public string Token => OAuth2Token;
+        public static string Token { get; private set; }
 
-        public async Task GenerateAuth2TokenAsync()
+        public static async Task GenerateAuth2TokenAsync()
         {
             using (var client = new HttpClient())
             {
@@ -33,7 +31,7 @@ namespace MovieLibrary.ApiSearch
                           .Accept
                           .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var url = "https://api.mediahound.com/1.3/security/oauth/token";
+                    const string url = "https://api.mediahound.com/1.3/security/oauth/token";
                     var parameters = new Dictionary<string, string> { { "client_id", "mhclt_dotNetMovieLibrary" }, { "client_secret", "TJUPmRCiyPTepw4QxjFT3ND8MxEID2TX23H7yYFegqdWM33Q" }, { "grant_type", "client_credentials" } };
                     var encodedContent = new FormUrlEncodedContent(parameters);
 
@@ -44,17 +42,18 @@ namespace MovieLibrary.ApiSearch
 
                         JObject res = JObject.Parse(responseContent);
 
-                        OAuth2Token = (string)res["access_token"];
-                        Token_type = (string)res["token_type"];
-                        Expires_in = (double)res["expires_in"];
+                        Token = (string)res["access_token"];
+                        TokenType = (string)res["token_type"];
+                        ExpiresIn = (double)res["expires_in"];
                         Scope = (string)res["scope"];
+
+                        Debug.WriteLine("Retrieved OAuth2 token");
                     }
                 }
                 catch (Exception e)
                 {
                     Debug.WriteLine(e.Message);
                 }
-                Debug.WriteLine("Retrieved OAuth2 token");
             }
         }
     }

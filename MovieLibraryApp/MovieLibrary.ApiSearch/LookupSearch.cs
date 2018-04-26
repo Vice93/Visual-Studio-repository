@@ -12,16 +12,15 @@ namespace MovieLibrary.ApiSearch
 {
     public class LookupSearch
     {
-        private readonly OAuth2 _oAuth2 = new OAuth2();
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
         public async Task<ObservableCollection<Movie>> GetMovieInfoAsync(string id)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
 
-            if (_oAuth2.Expires_in <= 5)
+            if (OAuth2.ExpiresIn <= 5)
             {
-                await _oAuth2.GenerateAuth2TokenAsync();
+                await OAuth2.GenerateAuth2TokenAsync();
             }
 
             _movieList.Clear();
@@ -30,7 +29,7 @@ namespace MovieLibrary.ApiSearch
             {
 
                 var param = Uri.EscapeUriString("{\"ids\":[\"" + id + "\"],\"components\":[\"primaryImage\",\"keyTraits\",\"keySuitabilities\"]}");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_oAuth2.Token_type, _oAuth2.Token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                 Debug.WriteLine(baseUri + param);
 
 
@@ -53,9 +52,9 @@ namespace MovieLibrary.ApiSearch
                     var imgRef = (string)movie["object"]["primaryImage"]["object"]["small"]["url"] ?? "/Assets/noImageAvailable.png";
                     var releaseDate = movie["object"]["releaseDate"] ?? 1;
                     var genre = "";
-                    var pg = "No PG-rating specified";
+                    var pg = "Not specified";
 
-                    if (movie["object"]["keySuitabilities"]["content"].Count() != 0)
+                    if (movie["object"]["keySuitabilities"]["content"].Any())
                     {
                         pg = (string)movie["object"]["keySuitabilities"]["content"][0]["object"]["name"];
                     }
@@ -70,7 +69,7 @@ namespace MovieLibrary.ApiSearch
                         }
                     }
 
-                    if (genreCount.Count() == 0)
+                    if (!genreCount.Any())
                     {
                         genre = "No genre available";
                     }

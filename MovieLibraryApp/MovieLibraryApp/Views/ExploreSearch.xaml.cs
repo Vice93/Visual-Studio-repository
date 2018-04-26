@@ -2,6 +2,7 @@
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using MovieLibraryApp.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -17,6 +18,7 @@ namespace MovieLibraryApp.Views
         public ExploreSearch()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Enabled;
             _esv = new ExploreSearchViewModel();
             PopulateYearCombo();
         }
@@ -35,14 +37,7 @@ namespace MovieLibraryApp.Views
                     (string)checkedButton.Content);
 
                 MainGrid.ItemsSource = res;
-                if (MainGrid.Items.Count == 0)
-                {
-                    EmptyList.Text = "Couldn't find any movies. Try a different search.";
-                }
-                else
-                {
-                    EmptyList.Text = "";
-                }
+                EmptyList.Text = MainGrid.Items.Any() ? "" : "Couldn't find any movies. Try a different search.";
             }
             finally
             {
