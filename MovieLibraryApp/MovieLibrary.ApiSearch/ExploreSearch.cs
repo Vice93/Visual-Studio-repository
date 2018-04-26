@@ -33,6 +33,14 @@ namespace MovieLibrary.ApiSearch
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + param);
 
                 var result = await client.SendAsync(request);
+
+                if (result.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    await OAuth2.GenerateAuth2TokenAsync();
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
+                    result = await client.SendAsync(request);
+                }
+
                 var content = await result.Content.ReadAsStringAsync();
 
                 JObject jobject = JObject.Parse(content);
@@ -51,14 +59,6 @@ namespace MovieLibrary.ApiSearch
                 request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
 
                 result = await client.SendAsync(request);
-
-                if (result.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    await OAuth2.GenerateAuth2TokenAsync();
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
-                    result = await client.SendAsync(request);
-                }
-
                 content = await result.Content.ReadAsStringAsync();
 
                 jobject = JObject.Parse(content);
