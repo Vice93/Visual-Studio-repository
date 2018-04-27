@@ -57,6 +57,7 @@
             Margin="25,10,0,0">
             <ComboBoxItem>Drama</ComboBoxItem>
             <ComboBoxItem>Comedy</ComboBoxItem>
+            <ComboBoxItem>Action-and-Adventure</ComboBoxItem>
             <ComboBoxItem>Crime</ComboBoxItem>
             <ComboBoxItem>Fantasy</ComboBoxItem>
             <ComboBoxItem>Horror</ComboBoxItem>

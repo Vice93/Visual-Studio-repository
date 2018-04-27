@@ -36,47 +36,61 @@ namespace MovieLibrary.ApiSearch
 
                 if (result.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    await OAuth2.GenerateAuth2TokenAsync();
+                    await OAuth2.GenerateAuth2TokenAsync("OAuth2 token expired. Generated a new one.");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                     result = await client.SendAsync(request);
                 }
+                else if (!result.IsSuccessStatusCode) return _movieList;
 
                 var content = await result.Content.ReadAsStringAsync();
 
                 JObject jobject = JObject.Parse(content);
-
                 JToken movies = jobject["content"];
 
-                if(movies.Any())
-                {
-                    AddMoviesToList(movies, genre, year);
-                }
+                if (movies.Any()) await AddMoviesToList(movies, genre, year);
                 
-                //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request for 10 more, I don't see a way around it.
-                JToken next = jobject["pagingInfo"];
-                var nextPage = next["next"];
-                if (!nextPage.Any()) return _movieList;
-                request = new HttpRequestMessage(HttpMethod.Get, (string)nextPage);
+                await NextResults(jobject, client, genre, year);
 
-                result = await client.SendAsync(request);
-                content = await result.Content.ReadAsStringAsync();
-
-                jobject = JObject.Parse(content);
-                movies = jobject["content"];
-
-                AddMoviesToList(movies,genre,year);
                 return _movieList;
             }
         }
 
-        public void AddMoviesToList(JToken movies, string genre, string year)
+        //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request per 10 more, I don't see a way around it.
+        private async Task NextResults(JObject jobject, HttpClient client, string genre, string year)
+        {
+            for (var i = 0; i < 4; i++) //Because I have a very limited amount of requests to make, I only make the request 4 times (5 in total for 50 results).
+            {
+                var next = jobject["pagingInfo"]["next"].ToString(); //Somehow this is nesting the components part of the 'next' url causing it to fail because its nested >3 times, I have no clue why because it doesn't do it in /search.
+                if (!next.Any()) return;
+                
+                int index = next.IndexOf("%2C%22components%22%3A%5B%7B%22name%22%3A%22metadata%22"); //Remove metadata components from the string so we can get the next pages.
+                if (index >= 0)
+                {
+                    next = next.Remove(index);
+                    next += "}]}";
+                }
+
+                var request = new HttpRequestMessage(HttpMethod.Get, next);
+
+                var result = await client.SendAsync(request);
+                if (!result.IsSuccessStatusCode) return;
+                var content = await result.Content.ReadAsStringAsync();
+
+                jobject = JObject.Parse(content);
+                var movies = jobject["content"];
+
+                await AddMoviesToList(movies,genre,year);
+            }
+            return;
+        }
+
+        public async Task AddMoviesToList(JToken movies, string genre, string year)
         {
             for (var i = 0; i < movies.Count(); i++)
             {
                 try
                 {
                     var movie = movies[i];
-
                     var desc = (string)movie["object"]["description"] ?? "No description available";
                     var imgRef = (string)movie["object"]["primaryImage"]["object"]["small"]["url"] ?? "/Assets/noImageAvailable.png";
 
@@ -92,12 +106,13 @@ namespace MovieLibrary.ApiSearch
                     };
                     _movieList.Add(mov);
                 }
-                catch (Exception e)
+                catch (NullReferenceException e)
                 {
                     Debug.WriteLine(e.Message);
                     break;
                 }
             }
+            await Task.CompletedTask;
         }
     }
 }

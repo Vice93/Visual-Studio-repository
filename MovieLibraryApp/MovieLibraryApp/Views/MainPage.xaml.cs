@@ -2,14 +2,9 @@
 using Windows.UI.Xaml.Controls;
 using Windows.System;
 using Windows.UI.Xaml.Input;
-using Template10.Services.NavigationService;
-using System.Collections.ObjectModel;
-using MovieLibrary.Models.Model;
 using MovieLibrary.ApiSearch;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
-using Windows.Storage;
-using System;
 using System.Linq;
 
 namespace MovieLibraryApp.Views
@@ -55,7 +50,7 @@ namespace MovieLibraryApp.Views
 
         private static async Task GenerateToken()
         {
-            await OAuth2.GenerateAuth2TokenAsync();
+            await OAuth2.GenerateAuth2TokenAsync("Retrieved OAuth2 token on app launch.");
         }
     }
 }

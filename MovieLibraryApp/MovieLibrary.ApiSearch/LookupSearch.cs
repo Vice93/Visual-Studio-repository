@@ -23,12 +23,9 @@ namespace MovieLibrary.ApiSearch
 
             using (var client = new HttpClient())
             {
-
                 var param = Uri.EscapeUriString("{\"ids\":[\"" + id + "\"],\"components\":[\"primaryImage\",\"keyTraits\",\"keySuitabilities\"]}");
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
-                Debug.WriteLine(baseUri + param);
-
-
                 client.DefaultRequestHeaders
                       .Accept
                       .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
@@ -39,10 +36,11 @@ namespace MovieLibrary.ApiSearch
 
                 if (result.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    await OAuth2.GenerateAuth2TokenAsync();
+                    await OAuth2.GenerateAuth2TokenAsync("OAuth2 token expired. Generated a new one.");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                     result = await client.SendAsync(request);
                 }
+                else if (!result.IsSuccessStatusCode) return _movieList;
 
                 var content = await result.Content.ReadAsStringAsync();
 
@@ -53,30 +51,21 @@ namespace MovieLibrary.ApiSearch
                     JToken movie = jobject["content"][0];
 
                     var desc = (string)movie["object"]["description"] ?? "No description available";
-                    var imgRef = (string)movie["object"]["primaryImage"]["object"]["small"]["url"] ?? "/Assets/noImageAvailable.png";
+                    var imgRef = (string)movie["object"]["primaryImage"]["object"]["medium"]["url"] ?? "/Assets/noImageAvailable.png";
                     var releaseDate = movie["object"]["releaseDate"] ?? 1;
                     var genre = "";
                     var pg = "Not specified";
 
-                    if (movie["object"]["keySuitabilities"]["content"].Any())
-                    {
-                        pg = (string)movie["object"]["keySuitabilities"]["content"][0]["object"]["name"];
-                    }
+                    if (movie["object"]["keySuitabilities"]["content"].Any()) pg = (string)movie["object"]["keySuitabilities"]["content"][0]["object"]["name"];
 
                     var genreCount = movie["object"]["keyTraits"]["content"] ?? 0;
                     for (var i = 0; i < genreCount.Count(); i++)
                     {
                         genre += (string)movie["object"]["keyTraits"]["content"][i]["object"]["name"];
-                        if(genreCount.Count()-1 != i)
-                        {
-                            genre += ", ";
-                        }
+                        if(genreCount.Count()-1 != i) genre += ", ";
                     }
 
-                    if (!genreCount.Any())
-                    {
-                        genre = "No genre available";
-                    }
+                    if (!genreCount.Any()) genre = "No genre available";
 
                     var mov = new Movie
                     {

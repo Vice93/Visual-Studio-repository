@@ -32,11 +32,7 @@ namespace MovieLibraryApp.ViewModels
 
         public async Task<ObservableCollection<Movie>> NormalSearch(string searchInput)
         {
-            Connection status = new Connection();
-            if (status.isInternetConnected)
-            {
-                return await _search.SearchForMovie(searchInput);
-            }
+            if (new Connection().IsInternetConnected) return await _search.SearchForMovie(searchInput);
             return new ObservableCollection<Movie>();
         }
     }

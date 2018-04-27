@@ -42,8 +42,7 @@
             <GridView Grid.Row="0" 
                 Name="MainGrid"
                 ScrollViewer.VerticalScrollMode="Enabled"
-                IsItemClickEnabled="True"
-                ItemsSource="/Assets/banner.jpg">
+                IsItemClickEnabled="True">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical"

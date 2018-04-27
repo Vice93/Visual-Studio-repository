@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MovieLibrary.ApiSearch;
 using MovieLibrary.Models.Model;
 using Template10.Mvvm;
-using Template10.Services.NavigationService;
 
 namespace MovieLibraryApp.ViewModels
 {
@@ -25,11 +20,7 @@ namespace MovieLibraryApp.ViewModels
            
         public async Task<ObservableCollection<Movie>>Explore(string genre, string year, string type)
         {
-            Connection status = new Connection();
-            if (status.isInternetConnected)
-            {
-                return await _explore.ExploreMovies(genre, year, type);
-            }
+            if (new Connection().IsInternetConnected) return await _explore.ExploreMovies(genre, year, type);
             return new ObservableCollection<Movie>();
         }
     }

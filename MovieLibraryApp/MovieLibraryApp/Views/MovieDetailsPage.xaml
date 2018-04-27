@@ -6,7 +6,7 @@
     xmlns:model="using:MovieLibrary.Models.Model"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="using:Template10.Converters"
-    MinWidth="800"
+    MinWidth="980"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -14,15 +14,15 @@
     </Page.Resources>
 
     <RelativePanel>
-        
+
         <Image 
             Name="BannerImage"
             RelativePanel.AlignLeftWithPanel="True"
             RelativePanel.AlignRightWithPanel="True"
             Stretch="UniformToFill" 
             Height="200" 
-            Source="/Assets/banner.jpg" 
-        />
+            Source="/Assets/banner.jpg"/>
+
         <TextBlock 
             FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
             FontSize="25"
@@ -31,8 +31,8 @@
             Margin="0,0,60,30"
             RelativePanel.AlignRightWithPanel="True"
             Foreground="#f5f5f5"
-            Text="Warcraft"
-        />
+            Text="Warcraft"/>
+
         <Grid
             RelativePanel.Below="BannerImage"
             RelativePanel.AlignHorizontalCenterWith="BannerImage">
@@ -44,21 +44,21 @@
                     <DataTemplate x:DataType="model:Movie">
                         <StackPanel 
                             Name="InfoPanel"
-                            CornerRadius="5"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
                             <Image
-                                
                                 Name="MoviePosterImage"
                                 Stretch="UniformToFill"
+                                HorizontalAlignment="Center"
                                 Source="{Binding ImageReference}"
-                                Width="170"
-                                Height="250"/>
+                                Width="250"
+                                Height="350"/>
                             <StackPanel 
+                                Background="#eeeeee"
                                 CornerRadius="5"
-                                Height="290"
-                                Width="500"
-                                Margin="60,45,0,0"
+                                Height="350"
+                                Width="600"
+                                Margin="40,0,0,0"
                                 RelativePanel.RightOf="InfoPanel"
                                 RelativePanel.AlignVerticalCenterWith="BannerPanel"
                                 HorizontalAlignment="Right">
@@ -71,7 +71,7 @@
                                         Foreground="#fafafa"
                                         Padding="20,7,0,10"
                                         Text="{Binding MovieName}"
-                                        FontSize="30"
+                                        FontSize="25"
                                         TextAlignment="Center"
                                     />
                                 </Border>
@@ -86,10 +86,7 @@
                                         <Run Text="PG: "/>
                                         <Run Text="{Binding Pg}" />
                                     </TextBlock>
-                                    <TextBlock
-                                        FontSize="12"
-                                        Margin="5,2,5,5"
-                                        Text="|"/>
+                                    <Border BorderBrush="#bdbdbd" BorderThickness="0 0 1 0" Height="15" Margin="5,0,5,0"/>
                                     <TextBlock
                                         Name="Genre"
                                         FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
@@ -98,10 +95,7 @@
                                         <Run Text="Genre: " />
                                         <Run Text="{Binding Genre}" />
                                     </TextBlock>
-                                    <TextBlock
-                                        FontSize="12"
-                                        Margin="5,2,5,5"
-                                        Text="|"/>
+                                    <Border BorderBrush="#bdbdbd" BorderThickness="0 0 1 0" Height="15" Margin="5,0,5,0"/>
                                     <TextBlock
                                         Name="ReleaseDate"
                                         FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
@@ -111,6 +105,7 @@
                                         <Run Text="{Binding ReleaseDate, Converter={StaticResource StringFormatConverter},ConverterParameter='{}{0:yyy}'}"/>
                                     </TextBlock>
                                 </StackPanel>
+                                <Border BorderBrush="#bdbdbd" BorderThickness="0 0 0 1" Width="580" />
                                 <TextBlock
                                     Name="Desc"
                                     FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
@@ -132,8 +127,8 @@
             Visibility="Collapsed"
             FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
             Content="Add to favorites"
-            Width="170"
-            Margin="-367,343,0,0"/>
+            Width="250"
+            Margin="-447,400,0,0"/>
         <ProgressRing 
             x:Name="LoadingIndicator"
             Foreground="#616161"
