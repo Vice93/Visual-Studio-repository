@@ -1,4 +1,6 @@
-﻿using MovieLibraryApp.ViewModels;
+﻿using System;
+using System.Diagnostics;
+using MovieLibraryApp.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.System;
 using Windows.UI.Xaml.Input;
@@ -6,18 +8,23 @@ using MovieLibrary.ApiSearch;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 using System.Linq;
+using Windows.Security.ExchangeActiveSyncProvisioning;
 
 namespace MovieLibraryApp.Views
 {
     public sealed partial class MainPage : Page
     {
-        private readonly MainPageViewModel _mvm;
         public MainPage()
         {
             InitializeComponent();
-            _mvm = new MainPageViewModel();
             NavigationCacheMode = NavigationCacheMode.Enabled;
-            if (OAuth2.Token == null) Task.Run(GenerateToken); //Generate token when the app launches
+
+            //Retrieve the OAuth2 token when the app launches
+            if (OAuth2.Token == null) Task.Run(GenerateToken); 
+
+            //Get user GUID
+            var eas = new EasClientDeviceInformation();
+            MovieLibrary.Models.Model.User.UserId = eas.Id;
         }
 
         private void SearchIcon_OnTapped(object sender, TappedRoutedEventArgs e)
@@ -38,10 +45,10 @@ namespace MovieLibraryApp.Views
             if (SearchInput.Text == "") return;
             try
             {
+                var mpvm = new MainPageViewModel();
                 LoadingIndicator.IsActive = true;
-
-                MainGrid.ItemsSource = await _mvm.NormalSearch(SearchInput.Text);
-                EmptyList.Text = MainGrid.Items.Any() ? "" : "Couldn't find any movies. Try a different search.";
+                MainGrid.ItemsSource = await mpvm.NormalSearch(SearchInput.Text);
+                EmptyList.Text = MainGrid.Items.Any() ? "" : "'" + SearchInput.Text + "' didn't return any results. Try searching for something else!";
             } finally
             {
                 LoadingIndicator.IsActive = false;

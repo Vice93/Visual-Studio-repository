@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MovieLibrary.Models.Model
 {
@@ -15,7 +11,6 @@ namespace MovieLibrary.Models.Model
         public string ImageReference { get; set; }
         public string Pg { get; set; }
         public string Genre { get; set; }
-        public string Language { get; set; }
 
         //Add director and producer maybe? There is a lack of them in general so it will be null more often than not
     }

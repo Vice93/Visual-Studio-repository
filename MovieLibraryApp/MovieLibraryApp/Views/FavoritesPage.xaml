@@ -5,7 +5,12 @@
     xmlns:local="using:MovieLibraryApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:MovieLibraryApp.ViewModels" 
     mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:FavoritesViewModel x:Name="ViewModel" />
+    </Page.DataContext>
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Image 
@@ -40,9 +45,11 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <GridView Grid.Row="0" 
-                Name="MainGrid"
-                ScrollViewer.VerticalScrollMode="Enabled"
-                IsItemClickEnabled="True">
+                      ScrollViewer.VerticalScrollMode="Enabled"
+                      Name="MainGrid"
+                      IsItemClickEnabled="True"
+                      Tapped="{x:Bind ViewModel.GoToMovieDetailsPage}"
+                      SelectedItem="{Binding MovieObject, Mode=TwoWay}">
                 <GridView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical"
@@ -73,5 +80,15 @@
                 </GridView.ItemTemplate>
             </GridView>
         </Grid>
+        <ProgressRing 
+            x:Name="LoadingIndicator"
+            Foreground="#616161"
+            Width="100"
+            Height="100"
+            Visibility="Visible"
+            RelativePanel.Below="BannerImage"
+            RelativePanel.AlignLeftWithPanel="True"
+            RelativePanel.AlignRightWithPanel="True"
+            Margin="0,150,0,0"/>
     </RelativePanel>
 </Page>

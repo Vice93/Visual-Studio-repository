@@ -18,7 +18,6 @@ namespace MovieLibrary.ApiSearch
         public async Task<ObservableCollection<Movie>> SearchForMovie(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");
-
             _movieList.Clear();
             using (var client = new HttpClient())
             {

@@ -9,6 +9,9 @@ namespace MovieLibraryApp.ViewModels
     public class MovieDetailsViewModel : ViewModelBase
     {
         private readonly LookupSearch _ls = new LookupSearch();
+
+        public Movie MovieObject { get; set; }
+
         public async Task<ObservableCollection<Movie>> Lookup(string id)
         {
             if (new Connection().IsInternetConnected) return await _ls.GetMovieInfoAsync(id);

@@ -4,8 +4,6 @@ namespace MovieLibrary.ApiSearch
 {
     public class Connection
     {
-        private bool IsInternetConnected = NetworkInterface.GetIsNetworkAvailable();
-
-        public bool IsInternetConnected { get => IsInternetConnected; }
+        public bool IsInternetConnected { get; } = NetworkInterface.GetIsNetworkAvailable();
     }
 }

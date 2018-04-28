@@ -57,6 +57,7 @@
                                 Background="#eeeeee"
                                 CornerRadius="5"
                                 Height="350"
+                                MaxHeight="350"
                                 Width="600"
                                 Margin="40,0,0,0"
                                 RelativePanel.RightOf="InfoPanel"
@@ -72,8 +73,7 @@
                                         Padding="20,7,0,10"
                                         Text="{Binding MovieName}"
                                         FontSize="25"
-                                        TextAlignment="Center"
-                                    />
+                                        TextAlignment="Center"/>
                                 </Border>
                                 <StackPanel 
                                     Name="Details"
@@ -106,12 +106,17 @@
                                     </TextBlock>
                                 </StackPanel>
                                 <Border BorderBrush="#bdbdbd" BorderThickness="0 0 0 1" Width="580" />
-                                <TextBlock
-                                    Name="Desc"
-                                    FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
-                                    Margin="10,10,10,10"
-                                    TextWrapping="Wrap"
-                                    Text="{Binding Description}" />
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled" Name="Scroller">
+                                    <TextBlock
+                                        Name="Desc"
+                                        MaxHeight="260"
+                                        Height="{Binding ElementName=Scroller, Path=ViewportHeight}"
+                                        VerticalAlignment="Stretch"
+                                        FontFamily="/Assets/Fonts/Montserrat/Montserrat-Regular.ttf#Montserrat"
+                                        Margin="10,10,10,10"
+                                        TextWrapping="Wrap"
+                                        Text="{Binding Description}" />
+                                </ScrollViewer>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>

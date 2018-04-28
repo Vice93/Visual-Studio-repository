@@ -61,10 +61,13 @@
             <ComboBoxItem>Crime</ComboBoxItem>
             <ComboBoxItem>Fantasy</ComboBoxItem>
             <ComboBoxItem>Horror</ComboBoxItem>
+            <ComboBoxItem>Kids-and-Family</ComboBoxItem>
             <ComboBoxItem>Documentary</ComboBoxItem>
             <ComboBoxItem>Romance</ComboBoxItem>
             <ComboBoxItem>Science-Fiction</ComboBoxItem>
             <ComboBoxItem>Western</ComboBoxItem>
+            <ComboBoxItem>Game-Shows</ComboBoxItem>
+            <ComboBoxItem>Sports-and-Outdoors</ComboBoxItem>
             <!-- These are all the genres I have found available in mediahound's API. Adding unexisting genres (like "Action" and "Adventure" strangely enough) returns a keyword not recognized error -->
         </ComboBox>
 

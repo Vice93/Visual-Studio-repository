@@ -37,7 +37,7 @@ namespace MovieLibraryApp.Views
                     (string)checkedButton.Content);
 
                 MainGrid.ItemsSource = res;
-                EmptyList.Text = MainGrid.Items.Any() ? "" : "Couldn't find any movies. Try a different search.";
+                EmptyList.Text = MainGrid.Items.Any() ? "" : "Nothing was found. Try some other parameters!";
             }
             finally
             {

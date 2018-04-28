@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using MovieLibraryApp.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,7 +25,25 @@ namespace MovieLibraryApp.Views
     {
         public FavoritesPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Enabled;
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            try
+            {
+                LoadingIndicator.IsActive = true;
+
+                FavoritesViewModel fvm = new FavoritesViewModel();
+                var res = await fvm.GetFavoriteMovies();
+                MainGrid.ItemsSource = res;
+            }
+            finally
+            {
+                LoadingIndicator.IsActive = false;
+            }
         }
     }
 }
