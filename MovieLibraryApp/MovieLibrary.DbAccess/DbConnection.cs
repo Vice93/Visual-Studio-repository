@@ -13,9 +13,9 @@ namespace MovieLibrary.DbAccess
     {
         private const string ConnectionString = @"Data Source=donau.hiof.no;Initial Catalog=jonasv;Integrated Security=False;User ID=jonasv;Password=Sp58y2;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        public ICollection<string> GetFavoriteMoviesFromDb(string userId)
+        public ICollection<Movie> GetFavoriteMoviesFromDb(string userId)
         {
-            ICollection<string> movieList = new List<string>();
+            ICollection<Movie> movieList = new List<Movie>();
             var query = "select MovieId from dbo.UserHasMovie where UserId='" + userId + "';";
             try
             {
@@ -30,7 +30,11 @@ namespace MovieLibrary.DbAccess
                         {
                             while (reader.Read())
                             {
-                                movieList.Add(reader.GetString(0));
+                                var mov = new Movie()
+                                {
+                                    MovieId = reader.GetString(0)
+                                };
+                                movieList.Add(mov);
                             }
                         }
                     }
@@ -38,12 +42,12 @@ namespace MovieLibrary.DbAccess
             }
             catch (SqlException e)
             {
-                movieList.Add("Exception: " + e.Message);
+                // Log exception somehow
             }
             return movieList;
         }
 
-        public void InsertFavoriteMovieIntoDb(string userId,string movieId)
+        public bool InsertFavoriteMovieIntoDb(string userId,string movieId)
         {
             var query = "insert into dbo.UserHasMovie (UserId,MovieId) values ('" + userId + "','" + movieId + "');";
 
@@ -52,23 +56,23 @@ namespace MovieLibrary.DbAccess
                 using (var con = new SqlConnection(ConnectionString))
                 {
                     con.Open();
-                    if (con.State != System.Data.ConnectionState.Open) return;
+                    if (con.State != System.Data.ConnectionState.Open) return false;
 
                     using (var cmd = con.CreateCommand())
                     {
                         cmd.CommandText = query;
                         cmd.ExecuteNonQuery();
-                        Debug.WriteLine("Inserted: " + userId + ", " + movieId);
                     }
+                    return true;
                 }
             }
             catch (SqlException e)
             {
-                // Log exception somehow
+                return false;
             }
         }
 
-        public void DeleteFavoriteMovieFromDb(string userId,string movieId)
+        public bool DeleteFavoriteMovieFromDb(string userId,string movieId)
         {
             var query = "delete from dbo.UserHasMovie where UserId = '" + userId + "' and MovieId = '" + movieId + "';";
 
@@ -77,18 +81,19 @@ namespace MovieLibrary.DbAccess
                 using (var con = new SqlConnection(ConnectionString))
                 {
                     con.Open();
-                    if (con.State != System.Data.ConnectionState.Open) return;
+                    if (con.State != System.Data.ConnectionState.Open) return false;
 
                     using (var cmd = con.CreateCommand())
                     {
                         cmd.CommandText = query;
                         cmd.ExecuteNonQuery();
                     }
+                    return true;
                 }
             }
             catch (SqlException e)
             {
-                //Log exception somehow
+                return false;
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using MovieLibrary.DbAccess;
+using MovieLibrary.Models.Model;
 
 namespace MovieLibrary.Api.Controllers
 {
@@ -15,18 +16,22 @@ namespace MovieLibrary.Api.Controllers
         // GET: api/favorites
         [HttpGet]
         [Route("api/favorites")]
-        public ICollection<string> Get([FromUri]string userId)
+        public IEnumerable<Movie> Get([FromUri]string userId)
         {
             var res = _dbConnection.GetFavoriteMoviesFromDb(userId);
+            Request.CreateResponse(HttpStatusCode.OK);
             return res;
         }
 
         // POST: api/Favorites
         [HttpPost]
         [Route("api/favorites")]
-        public void Post([FromBody]string userId,string movieId)
+        public HttpResponseMessage Post([FromBody]string userId,string movieId)
         {
-            _dbConnection.InsertFavoriteMovieIntoDb(userId,movieId);
+            if(_dbConnection.InsertFavoriteMovieIntoDb(userId,movieId)) return Request.CreateResponse(HttpStatusCode.OK, "Added it");
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "Something wrong happened.");
+
+            //These could use much more work to check for everything
         }
 
         // PUT: api/Favorites/5
@@ -36,10 +41,14 @@ namespace MovieLibrary.Api.Controllers
         }
 
         // DELETE: api/Favorites/5
-        public void Delete(string userId, string movieId)
+        [HttpDelete]
+        [Route("api/favorites")]
+        public HttpResponseMessage Delete([FromUri]string userId, string movieId)
         {
+            if(_dbConnection.DeleteFavoriteMovieFromDb(userId,movieId)) return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, "Something wrong happened.");
 
-            _dbConnection.DeleteFavoriteMovieFromDb(userId,movieId);
+            //These could use much more work to check for everything
         }
     }
 }

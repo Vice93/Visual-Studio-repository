@@ -47,6 +47,7 @@ namespace MovieLibraryApp.Views
             {
                 var mpvm = new MainPageViewModel();
                 LoadingIndicator.IsActive = true;
+                Debug.WriteLine(MovieLibrary.Models.Model.User.UserId);
                 MainGrid.ItemsSource = await mpvm.NormalSearch(SearchInput.Text);
                 EmptyList.Text = MainGrid.Items.Any() ? "" : "'" + SearchInput.Text + "' didn't return any results. Try searching for something else!";
             } finally
