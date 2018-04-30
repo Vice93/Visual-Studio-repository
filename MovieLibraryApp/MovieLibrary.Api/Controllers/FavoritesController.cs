@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using MovieLibrary.DbAccess;
 using MovieLibrary.Models.Model;
+using Newtonsoft.Json;
 
 namespace MovieLibrary.Api.Controllers
 {
@@ -26,9 +27,13 @@ namespace MovieLibrary.Api.Controllers
         // POST: api/Favorites
         [HttpPost]
         [Route("api/favorites")]
-        public HttpResponseMessage Post([FromBody]string userId,string movieId)
+        public HttpResponseMessage Post()
         {
-            if(_dbConnection.InsertFavoriteMovieIntoDb(userId,movieId)) return Request.CreateResponse(HttpStatusCode.OK, "Added it");
+            var requestContent = Request.Content;
+            var jsonContent = requestContent.ReadAsStringAsync().Result;
+            var insert = JsonConvert.DeserializeObject<InsertModel>(jsonContent);
+
+            if (_dbConnection.InsertFavoriteMovieIntoDb(insert.UserId,insert.MovieId)) return Request.CreateResponse(HttpStatusCode.OK, "Added movie");
             return Request.CreateResponse(HttpStatusCode.BadRequest, "Something wrong happened.");
 
             //These could use much more work to check for everything
@@ -50,5 +55,11 @@ namespace MovieLibrary.Api.Controllers
 
             //These could use much more work to check for everything
         }
+    }
+
+    public class InsertModel
+    {
+        public string UserId { get; set; }
+        public string MovieId { get; set; }
     }
 }

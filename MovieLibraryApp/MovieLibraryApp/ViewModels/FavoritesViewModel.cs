@@ -38,31 +38,26 @@ namespace MovieLibraryApp.ViewModels
                     var movies = JsonConvert.DeserializeObject<ObservableCollection<Movie>>(res);
 
                     var idString = "";
-                    bool cont = false;
                     for (var i=0; i<movies.Count; i++)
                     {
-                        if (!User.FavoriteMoviesIds.Contains(movies[i].MovieId) || User.FavoriteMoviesIds.Count != movies.Count)
-                        {
-                            User.FavoriteMoviesIds.Add(movies[i].MovieId);
+                        if (!User.FavoriteMoviesIds.Contains(movies[i].MovieId)) User.FavoriteMoviesIds.Add(movies[i].MovieId);
 
-                            idString += movies[i].MovieId;
-                            if (i != movies.Count - 1) idString += "\",\"";
-                            cont = true;
-                        }
+                        idString += movies[i].MovieId;
+                        if (i != movies.Count - 1) idString += "\",\"";
                     }
-                    if (cont)
-                    {
-                        var result = await ls.GetMovieInfoAsync(idString);
 
-                        return result;
-                    }
-                    if (movies.Count == 0)
+                    var result = await ls.GetMovieInfoAsync(idString);
+
+                    if (result.Count == 0)
                     {
                         User.FavoriteMoviesIds.Clear();
+
                         return new ObservableCollection<Movie>();
                     }
 
-                    return null;
+                    return result;
+                    
+                    
                 }
             }
             catch (Exception e)
@@ -97,13 +92,16 @@ namespace MovieLibraryApp.ViewModels
             {
                 using (var client = new HttpClient())
                 {
-                    var content = new FormUrlEncodedContent(new[]
+                    var model = new InsertModel
                     {
-                        new KeyValuePair<string, string>("userId", User.UserId.ToString()),
-                        new KeyValuePair<string, string>("movieId",movieId)
-                    });
+                        UserId = User.UserId.ToString(),
+                        MovieId = movieId
+                    };
 
-                    var res = await client.PostAsync(_baseUri + "/favorites", content);
+                    var json = JsonConvert.SerializeObject(model);
+                    var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var res = await client.PostAsync(_baseUri + "/favorites", stringContent);
 
                     if(res.IsSuccessStatusCode) return true;
                     return false;
@@ -116,6 +114,10 @@ namespace MovieLibraryApp.ViewModels
             }
         }
 
-        
+        public class InsertModel
+        {
+            public string UserId { get; set; }
+            public string MovieId { get; set; }
+        }
     }
 }

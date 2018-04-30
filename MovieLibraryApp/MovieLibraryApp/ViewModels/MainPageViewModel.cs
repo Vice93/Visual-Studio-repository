@@ -9,8 +9,39 @@ namespace MovieLibraryApp.ViewModels
     public class MainPageViewModel : ViewModelBase
     {
         private readonly Search _search = new Search();
+        public ObservableCollection<Movie> DesignSample { get; set; }
 
         public Movie MovieObject { get; set; }
+
+        public MainPageViewModel()
+        {
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            {
+                DesignSample = new ObservableCollection<Movie>()
+                {
+                    new Movie
+                    {
+                        MovieName = "SampleMovie 1",
+                        ImageReference = "/Assets/banner.jpg",
+                    },
+                    new Movie
+                    {
+                        MovieName = "SampleMovie 2",
+                        ImageReference = "/Assets/banner.jpg",
+                    },
+                    new Movie
+                    {
+                        MovieName = "SampleMovie 3",
+                        ImageReference = "/Assets/banner.jpg",
+                    },
+                    new Movie
+                    {
+                        MovieName = "SampleMovie 4",
+                        ImageReference = "/Assets/banner.jpg",
+                    }
+                };
+            }
+        }
 
         public void GotoDetailsPage() =>
             NavigationService.Navigate(typeof(Views.DetailPage));

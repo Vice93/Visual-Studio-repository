@@ -5,7 +5,7 @@
       xmlns:model="using:MovieLibrary.Models.Model"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:MovieLibraryApp.ViewModels" 
-      mc:Ignorable="d">
+      mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:MainPageViewModel, IsDesignTimeCreatable=True}">
 
     <Page.DataContext>
         <vm:MainPageViewModel x:Name="ViewModel" />
@@ -74,6 +74,7 @@
                 IsItemClickEnabled="True"
                 Tapped="{x:Bind ViewModel.GoToMovieDetailsPage}"
                 SelectedItem="{Binding MovieObject, Mode=TwoWay}"
+                ItemsSource="{Binding DesignSample}"
                 >
                 <GridView.ItemTemplate>
                     <DataTemplate x:DataType="model:Movie">

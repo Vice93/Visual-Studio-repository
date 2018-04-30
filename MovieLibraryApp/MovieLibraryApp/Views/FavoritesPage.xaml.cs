@@ -39,6 +39,7 @@ namespace MovieLibraryApp.Views
                 LoadingIndicator.IsActive = true;
 
                 FavoritesViewModel fvm = new FavoritesViewModel();
+
                 var res = await fvm.GetFavoriteMovies();
 
                 if (res != null) MainGrid.ItemsSource = res;

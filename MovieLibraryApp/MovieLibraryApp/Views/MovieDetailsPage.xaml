@@ -127,7 +127,7 @@
             RelativePanel.Below="BannerImage"
             RelativePanel.AlignHorizontalCenterWith="BannerImage"
             Foreground="#fafafa"
-            Background="#424242"
+            Background="DarkGray"
             Name="AddToFavorites"
             Visibility="Collapsed"
             FontFamily="/Assets/Fonts/Lato/Lato-Bold.tff#Lato"
