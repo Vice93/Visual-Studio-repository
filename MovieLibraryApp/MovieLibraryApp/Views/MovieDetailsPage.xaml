@@ -134,7 +134,7 @@
             Content="Add to favorites"
             Tapped="AddToFavorites_Tapped"
             Width="250"
-            Margin="-447,400,0,0"/>
+            Margin="-448,400,0,0"/>
         <TextBlock 
             RelativePanel.Below="AddToFavorites"
             RelativePanel.AlignHorizontalCenterWith="AddToFavorites"/>
