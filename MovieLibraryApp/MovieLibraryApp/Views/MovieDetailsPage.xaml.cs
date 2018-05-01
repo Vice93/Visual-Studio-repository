@@ -7,7 +7,6 @@ using MovieLibrary.Models.Model;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
 using System;
-using System.Diagnostics;
 using MovieLibrary.ApiSearch;
 using Windows.UI.Notifications;
 

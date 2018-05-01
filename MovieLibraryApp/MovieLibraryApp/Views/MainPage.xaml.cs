@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using MovieLibraryApp.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.System;
