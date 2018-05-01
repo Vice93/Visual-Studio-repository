@@ -12,10 +12,10 @@ namespace MovieLibrary.ApiSearch
 {
     public static class OAuth2
     {
-        public static string TokenType { get; set; }
-        public static double ExpiresIn { get; set; }
-        public static string Scope { get; set; }
-        public static string Token { get; private set; }
+        public static string TokenType { get; set; } = "type";
+        public static double ExpiresIn { get; set; } = 0;
+        public static string Scope { get; set; } = "scope";
+        public static string Token { get; private set; } = "token";
 
         public static async Task GenerateAuth2TokenAsync(string message)
         {

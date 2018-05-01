@@ -18,6 +18,7 @@ namespace MovieLibrary.ApiSearch
         public async Task<ObservableCollection<Movie>> SearchForMovie(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");
+            var param = searchInput + "?types=movie&types=showseries";
             _movieList.Clear();
             using (var client = new HttpClient())
             {
@@ -27,7 +28,7 @@ namespace MovieLibrary.ApiSearch
                         .Accept
                         .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + searchInput + "?types=movie&types=showseries");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, baseUri + param);
 
                 var result = await client.SendAsync(request);
 
@@ -35,7 +36,7 @@ namespace MovieLibrary.ApiSearch
                 {
                     await OAuth2.GenerateAuth2TokenAsync("OAuth2 token expired. Generated a new one.");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
-                    result = await client.SendAsync(request);
+                    result = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, baseUri + param));
                 }
                 else if (!result.IsSuccessStatusCode) return _movieList;
 

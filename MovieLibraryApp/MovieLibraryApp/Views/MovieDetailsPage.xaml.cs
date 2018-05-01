@@ -37,6 +37,13 @@ namespace MovieLibraryApp.Views
 
             if (e.Parameter == null) return;
 
+            if (!new Connection().IsInternetConnected)
+            {
+                AddToFavorites.Visibility = Visibility.Collapsed;
+                ShowToastNotification("No internet", "You need an internet connection to view this movie's details.");
+                return;
+            }
+
             try
             {
                 LoadingIndicator.IsActive = true;

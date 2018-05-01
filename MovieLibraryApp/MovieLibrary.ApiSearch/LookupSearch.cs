@@ -37,7 +37,7 @@ namespace MovieLibrary.ApiSearch
                 {
                     await OAuth2.GenerateAuth2TokenAsync("OAuth2 token expired. Generated a new one.");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
-                    result = await client.SendAsync(request);
+                    result = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get,baseUri + param));
                 }
                 else if (!result.IsSuccessStatusCode) return _movieList;
 
