@@ -11,10 +11,21 @@ using Newtonsoft.Json.Linq;
 
 namespace MovieLibrary.ApiSearch
 {
+    /// <summary>
+    /// The lookup search class
+    /// </summary>
     public class LookupSearch
     {
+        /// <summary>
+        /// The movie list
+        /// </summary>
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
+        /// <summary>
+        /// Searches the mediahound /lookup endpoint for details about the movies with the ids.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>The observable collection containing movie objects.</returns>
         public async Task<ObservableCollection<Movie>> GetMovieInfoAsync(string id)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/lookup?params=");
@@ -55,6 +66,13 @@ namespace MovieLibrary.ApiSearch
 
         }
 
+        /// <summary>
+        /// Gets the next page URI and performs a new search if it exists.
+        /// Because of API limiations, it performs this search 4 extra times for a total of 50 results, however you can increase it to as many as you'd like.
+        /// </summary>
+        /// <param name="jobject">The jobject.</param>
+        /// <param name="client">The client.</param>
+        /// <returns></returns>
         private async Task NextResults(JObject jobject, HttpClient client)
         {
             for (var i = 0; i < 4; i++) //Because I have a very limited amount of requests to make (Student version, not paid), I only make the request 4 times (5 in total for 50 results). Limit is 200 calls per day (2000 results).
@@ -78,6 +96,11 @@ namespace MovieLibrary.ApiSearch
             }
         }
 
+        /// <summary>
+        /// Adds the movies to the Observable Collection.
+        /// </summary>
+        /// <param name="movies">The movies.</param>
+        /// <returns></returns>
         private async Task AddMoviesToList(JToken movies)
         {
             for (var i = 0; i < movies.Count(); i++)

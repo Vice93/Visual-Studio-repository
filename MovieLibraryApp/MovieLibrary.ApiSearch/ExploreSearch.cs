@@ -11,10 +11,23 @@ using Newtonsoft.Json.Linq;
 
 namespace MovieLibrary.ApiSearch
 {
+    /// <summary>
+    /// The explore search class
+    /// </summary>
     public class ExploreSearch
     {
+        /// <summary>
+        /// The movie list
+        /// </summary>
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
+        /// <summary>
+        /// Searches the mediahound /explore endpoint for movies based the parameters.
+        /// </summary>
+        /// <param name="genre">The genre.</param>
+        /// <param name="year">The year.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>The observable collection containing movie objects.</returns>
         public async Task<ObservableCollection<Movie>> ExploreMovies(string genre, string year, string type)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/graph/explore?params=");
@@ -55,7 +68,13 @@ namespace MovieLibrary.ApiSearch
             }
         }
 
-        //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request per 10 more, I don't see a way around it.
+        /// <summary>
+        /// Gets the next page URI and performs a new search if it exists.
+        /// Because of API limiations, it performs this search 4 extra times for a total of 50 results, however you can increase it to as many as you'd like.
+        /// </summary>
+        /// <param name="jobject">The jobject.</param>
+        /// <param name="client">The client.</param>
+        /// <returns></returns>
         private async Task NextResults(JObject jobject, HttpClient client)
         {
             for (var i = 0; i < 4; i++) //Because I have a very limited amount of requests to make (Student version, not paid), I only make the request 4 times (5 in total for 50 results). Limit is 200 calls per day (2000 results).
@@ -79,6 +98,11 @@ namespace MovieLibrary.ApiSearch
             }
         }
 
+        /// <summary>
+        /// Adds the movies to the Observable Collection.
+        /// </summary>
+        /// <param name="movies">The movies.</param>
+        /// <returns></returns>
         public async Task AddMoviesToList(JToken movies)
         {
             for (var i = 0; i < movies.Count(); i++)
@@ -99,7 +123,8 @@ namespace MovieLibrary.ApiSearch
                 catch (NullReferenceException e)
                 {
                     Debug.WriteLine(e.Message);
-                    break;
+                    /* 'Cuz I'm one step closer to the edge,*/
+                    /*and I'm about to */ break;
                 }
             }
             await Task.CompletedTask;

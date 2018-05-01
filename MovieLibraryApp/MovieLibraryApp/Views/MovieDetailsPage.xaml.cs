@@ -16,13 +16,25 @@ using Windows.UI.Notifications;
 namespace MovieLibraryApp.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// The movie details page
     /// </summary>
     public sealed partial class MovieDetailsPage
     {
+        /// <summary>
+        /// The Moviedetails viewmodel
+        /// </summary>
         private readonly MovieDetailsViewModel _mdvm;
+        /// <summary>
+        /// The template10 serialization service
+        /// </summary>
         private readonly ISerializationService _serializationService;
+        /// <summary>
+        /// The movie identifier
+        /// </summary>
         private string movieId = "";
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MovieDetailsPage"/> class.
+        /// </summary>
         public MovieDetailsPage()
         {
             InitializeComponent();
@@ -31,6 +43,10 @@ namespace MovieLibraryApp.Views
             _serializationService = SerializationService.Json;
         }
 
+        /// <summary>
+        /// Invoked when the Page is loaded and becomes the current source of a parent Frame.
+        /// </summary>
+        /// <param name="e">Event data that can be examined by overriding code. The event data is representative of the pending navigation that will load the current Page. Usually the most relevant property to examine is Parameter.</param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -62,6 +78,11 @@ namespace MovieLibraryApp.Views
             }
         }
 
+        /// <summary>
+        /// Handles the Tapped event of the AddToFavorites control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TappedRoutedEventArgs"/> instance containing the event data.</param>
         private async void AddToFavorites_Tapped(object sender, TappedRoutedEventArgs e)
         {
             FavoritesViewModel fvm = new FavoritesViewModel();
@@ -86,6 +107,11 @@ namespace MovieLibraryApp.Views
             CheckIfMovieIsFavorite(movieId);
         }
 
+        /// <summary>
+        /// Checks if movie is already a favorite, and change button appearance to match.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
         private bool CheckIfMovieIsFavorite(string id)
         {
             if (User.FavoriteMoviesIds.Contains(id)){
@@ -100,6 +126,11 @@ namespace MovieLibraryApp.Views
         }
 
         // Copied from https://stackoverflow.com/a/37542911/5309584
+        /// <summary>
+        /// Shows a toast notification.
+        /// </summary>
+        /// <param name="title">Title of the toast.</param>
+        /// <param name="stringContent">Content of the toast.</param>
         private void ShowToastNotification(string title, string stringContent)
         {
             ToastNotifier ToastNotifier = ToastNotificationManager.CreateToastNotifier();

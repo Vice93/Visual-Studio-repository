@@ -10,13 +10,45 @@ using System.Threading.Tasks;
 
 namespace MovieLibrary.ApiSearch
 {
+    /// <summary>
+    /// The OAuth2 class responsible for creating a new token if the old one has expired, is wrong or doesn't exist yet.
+    /// </summary>
     public static class OAuth2
     {
+        /// <summary>
+        /// Gets or sets the type of the token.
+        /// </summary>
+        /// <value>
+        /// The type of the token.
+        /// </value>
         public static string TokenType { get; set; } = "type";
+        /// <summary>
+        /// Gets or sets token expiration.
+        /// </summary>
+        /// <value>
+        /// The expires in.
+        /// </value>
         public static double ExpiresIn { get; set; } = 0;
+        /// <summary>
+        /// Gets or sets the scope of the token.
+        /// </summary>
+        /// <value>
+        /// The scope.
+        /// </value>
         public static string Scope { get; set; } = "scope";
+        /// <summary>
+        /// Gets the OAuth2 token.
+        /// </summary>
+        /// <value>
+        /// The OAuth2 token.
+        /// </value>
         public static string Token { get; private set; } = "token";
 
+        /// <summary>
+        /// Generates the OAuth2 token asynchronous.
+        /// </summary>
+        /// <param name="message">The message to log in output.</param>
+        /// <returns></returns>
         public static async Task GenerateAuth2TokenAsync(string message)
         {
             using (var client = new HttpClient())
@@ -47,6 +79,10 @@ namespace MovieLibrary.ApiSearch
                         Scope = (string)res["scope"];
 
                         Debug.WriteLine(message);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Couldn't generate OAuth2 token. Statuscode: " + response.StatusCode + ", Message: " + message);
                     }
                 }
                 catch (Exception e)

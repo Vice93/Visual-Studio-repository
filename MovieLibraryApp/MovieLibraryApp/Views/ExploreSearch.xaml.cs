@@ -10,11 +10,17 @@ using MovieLibraryApp.ViewModels;
 namespace MovieLibraryApp.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// The explore search page.
     /// </summary>
     public sealed partial class ExploreSearch : Page
     {
+        /// <summary>
+        /// The explore search viewmodel.
+        /// </summary>
         private readonly ExploreSearchViewModel _esv;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExploreSearch"/> class.
+        /// </summary>
         public ExploreSearch()
         {
             this.InitializeComponent();
@@ -23,6 +29,9 @@ namespace MovieLibraryApp.Views
             PopulateYearCombo();
         }
 
+        /// <summary>
+        /// Performs a search based on the selected parameters.
+        /// </summary>
         private async void Search()
         {
             if (GenreCombo.SelectionBoxItem == null || YearCombo.SelectionBoxItem == null) return;
@@ -45,11 +54,19 @@ namespace MovieLibraryApp.Views
             }
         }
 
+        /// <summary>
+        /// Handles the OnClick event of the SearchButton control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void SearchButton_OnClick(object sender, RoutedEventArgs e)
         {
             Search();
         }
 
+        /// <summary>
+        /// Populates the year combo with the last 50 years.
+        /// </summary>
         private void PopulateYearCombo()
         {
             for(var i=0; i<50; i++)

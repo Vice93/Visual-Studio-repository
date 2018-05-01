@@ -11,10 +11,21 @@ using Newtonsoft.Json.Linq;
 
 namespace MovieLibrary.ApiSearch
 {
+    /// <summary>
+    /// The search class
+    /// </summary>
     public class Search
     {
+        /// <summary>
+        /// The movie list
+        /// </summary>
         private readonly ObservableCollection<Movie> _movieList = new ObservableCollection<Movie>();
 
+        /// <summary>
+        /// Searches the mediahound /search endpoint for movies based on the search input.
+        /// </summary>
+        /// <param name="searchInput">The search input.</param>
+        /// <returns name="_movieList">The ObservableCollection containing Movie objects</returns>
         public async Task<ObservableCollection<Movie>> SearchForMovie(string searchInput)
         {
             var baseUri = new Uri("https://api.mediahound.com/1.3/search/all/");
@@ -52,8 +63,14 @@ namespace MovieLibrary.ApiSearch
                 return _movieList;
             }
         }
-
-        //I realise this is a silly solution and a lot of redundant code (DRY), however since the API only give me 10 results per page and requires me to make an additional request per 10 more, I don't see a way around it.
+        
+        /// <summary>
+        /// Gets the next page URI and performs a new search if it exists.
+        /// Because of API limiations, it performs this search 4 extra times for a total of 50 results, however you can increase it to as many as you'd like.
+        /// </summary>
+        /// <param name="jobject">The jobject.</param>
+        /// <param name="client">The client.</param>
+        /// <returns></returns>
         private async Task NextResults(JObject jobject, HttpClient client)
         {
             for (var i = 0; i < 4; i++)
@@ -75,6 +92,11 @@ namespace MovieLibrary.ApiSearch
             return;
         }
 
+        /// <summary>
+        /// Adds the movies to the Observable Collection.
+        /// </summary>
+        /// <param name="movies">The movies.</param>
+        /// <returns></returns>
         private async Task AddMoviesToList(JToken movies)
         {
             for (var i = 0; i < movies.Count(); i++)
