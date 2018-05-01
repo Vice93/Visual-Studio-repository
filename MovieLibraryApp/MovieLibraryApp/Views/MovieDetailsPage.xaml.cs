@@ -8,6 +8,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI;
 using System;
 using System.Diagnostics;
+using MovieLibrary.ApiSearch;
+using Windows.UI.Notifications;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -56,10 +58,12 @@ namespace MovieLibraryApp.Views
         private async void AddToFavorites_Tapped(object sender, TappedRoutedEventArgs e)
         {
             FavoritesViewModel fvm = new FavoritesViewModel();
+
+            if (!new Connection().IsInternetConnected) ShowToastNotification("No internet", "You need an internet connection to add or remove a movie from favorites.");
+
             if (CheckIfMovieIsFavorite(movieId)) // Delete from db
             {
                 var response = await fvm.DeleteMovieFromDb(movieId);
-                Debug.WriteLine(response);
 
                 if (response)
                 {
@@ -69,7 +73,6 @@ namespace MovieLibraryApp.Views
             else //Add to db
             {
                 var response = await fvm.InsertMovieInDb(movieId);
-                Debug.WriteLine(response);
 
                 if (response) User.FavoriteMoviesIds.Add(movieId);
             }
@@ -83,12 +86,27 @@ namespace MovieLibraryApp.Views
                 AddToFavorites.Content = "Remove from favorites";
                 return true;
             }
-            else
-            {
-                AddToFavorites.Background = new SolidColorBrush(Colors.DarkGray);
-                AddToFavorites.Content = "Add to favorites";
-                return false;
-            }
+
+            AddToFavorites.Background = new SolidColorBrush(Colors.DarkGray);
+            AddToFavorites.Content = "Add to favorites";
+            return false;
+        }
+
+        // Copied from https://stackoverflow.com/a/37542911/5309584
+        private void ShowToastNotification(string title, string stringContent)
+        {
+            ToastNotifier ToastNotifier = ToastNotificationManager.CreateToastNotifier();
+            Windows.Data.Xml.Dom.XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+            Windows.Data.Xml.Dom.XmlNodeList toastNodeList = toastXml.GetElementsByTagName("text");
+            toastNodeList.Item(0).AppendChild(toastXml.CreateTextNode(title));
+            toastNodeList.Item(1).AppendChild(toastXml.CreateTextNode(stringContent));
+            Windows.Data.Xml.Dom.IXmlNode toastNode = toastXml.SelectSingleNode("/toast");
+            Windows.Data.Xml.Dom.XmlElement audio = toastXml.CreateElement("audio");
+            audio.SetAttribute("src", "ms-winsoundevent:Notification.SMS");
+
+            ToastNotification toast = new ToastNotification(toastXml);
+            toast.ExpirationTime = DateTime.Now.AddSeconds(4);
+            ToastNotifier.Show(toast);
         }
     }
 }

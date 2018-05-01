@@ -20,8 +20,13 @@ namespace MovieLibrary.Api.Controllers
         public IEnumerable<Movie> Get([FromUri]string userId)
         {
             var res = _dbConnection.GetFavoriteMoviesFromDb(userId);
-            Request.CreateResponse(HttpStatusCode.OK);
-            return res;
+            if(res != null)
+            {
+                Request.CreateResponse(HttpStatusCode.OK);
+                return res;
+            }
+            Request.CreateResponse(HttpStatusCode.Conflict);
+            return null;
         }
 
         // POST: api/Favorites

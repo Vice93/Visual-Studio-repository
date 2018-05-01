@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MovieLibrary.Models.Model;
 
 namespace MovieLibrary.DbAccess
@@ -13,9 +8,9 @@ namespace MovieLibrary.DbAccess
     {
         private const string ConnectionString = @"Data Source=donau.hiof.no;Initial Catalog=jonasv;Integrated Security=False;User ID=jonasv;Password=Sp58y2;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        public ICollection<Movie> GetFavoriteMoviesFromDb(string userId)
+        public List<Movie> GetFavoriteMoviesFromDb(string userId)
         {
-            ICollection<Movie> movieList = new List<Movie>();
+            List<Movie> movieList = new List<Movie>();
             var query = "select MovieId from dbo.UserHasMovie where UserId='" + userId + "';";
             try
             {
@@ -36,15 +31,15 @@ namespace MovieLibrary.DbAccess
                                 };
                                 movieList.Add(mov);
                             }
+                            return movieList;
                         }
                     }
                 }
             }
-            catch (SqlException e)
+            catch
             {
-                // Log exception somehow
+                return null;
             }
-            return movieList;
         }
 
         public bool InsertFavoriteMovieIntoDb(string userId,string movieId)
@@ -66,7 +61,7 @@ namespace MovieLibrary.DbAccess
                     return true;
                 }
             }
-            catch (SqlException e)
+            catch
             {
                 return false;
             }
@@ -91,7 +86,7 @@ namespace MovieLibrary.DbAccess
                     return true;
                 }
             }
-            catch (SqlException e)
+            catch
             {
                 return false;
             }
