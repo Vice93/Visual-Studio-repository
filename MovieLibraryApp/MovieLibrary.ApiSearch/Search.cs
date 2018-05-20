@@ -33,6 +33,7 @@ namespace MovieLibrary.ApiSearch
             _movieList.Clear();
             using (var client = new HttpClient())
             {
+                if (OAuth2.Token == null) await OAuth2.GenerateAuth2TokenAsync("Token was null. Retrieved new one.");
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                 client.DefaultRequestHeaders

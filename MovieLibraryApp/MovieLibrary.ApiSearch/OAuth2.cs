@@ -21,28 +21,28 @@ namespace MovieLibrary.ApiSearch
         /// <value>
         /// The type of the token.
         /// </value>
-        public static string TokenType { get; set; } = "type";
+        public static string TokenType { get; set; }
         /// <summary>
         /// Gets or sets token expiration.
         /// </summary>
         /// <value>
         /// The expires in.
         /// </value>
-        public static double ExpiresIn { get; set; } = 0;
+        public static double ExpiresIn { get; set; }
         /// <summary>
         /// Gets or sets the scope of the token.
         /// </summary>
         /// <value>
         /// The scope.
         /// </value>
-        public static string Scope { get; set; } = "scope";
+        public static string Scope { get; set; }
         /// <summary>
         /// Gets the OAuth2 token.
         /// </summary>
         /// <value>
         /// The OAuth2 token.
         /// </value>
-        public static string Token { get; private set; } = "token";
+        public static string Token { get; private set; }
 
         /// <summary>
         /// Generates the OAuth2 token asynchronous.

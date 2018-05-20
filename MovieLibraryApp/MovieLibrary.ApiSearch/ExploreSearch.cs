@@ -38,6 +38,8 @@ namespace MovieLibrary.ApiSearch
                 var removeDashFromType = type.Replace("/", string.Empty);
                 var param = Uri.EscapeUriString("{\"filters\": {\"returnType\": {\"$eq\": \"" + removeDashFromType + "\"},\"traits\": {\"$eq\": \"mhgnr-" + genre.ToLower() + "\"},\"year\": {\"$in\":[" + year + "]}}, \"components\":[\"primaryImage\"]}");
 
+                if (OAuth2.Token == null) await OAuth2.GenerateAuth2TokenAsync("Token was null. Retrieved new one.");
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(OAuth2.TokenType, OAuth2.Token);
                 client.DefaultRequestHeaders
                       .Accept
